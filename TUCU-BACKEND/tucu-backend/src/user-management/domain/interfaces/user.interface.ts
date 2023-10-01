@@ -1,10 +1,18 @@
 import { User } from "../User";
-
+/**
+ * Interface User
+ */
 export interface IUserRepository{
     // Método addUser: agrega un usuario al repositorio.
   // - Parámetro 'user': un objeto User que representa al usuario a agregar.
   // - Retorna una promesa que eventualmente resuelve en un objeto User, que representa al usuario agregado.
   addUser(user: User): Promise<User>;
+
+  // Método findByCredentials: busca un usuario por sus credenciales (nombre de usuario y contraseña) en el repositorio.
+  // - Parámetro 'username': una cadena que representa el nombre de usuario del usuario a buscar.
+  // - Parámetro 'password': una cadena que representa la contraseña del usuario a buscar.
+  // - Retorna una promesa que eventualmente resuelve en un objeto User si se encuentran las credenciales, o null si no se encuentran.
+  findByCredentials(username: string, password: string): Promise<User | null>;
 
   // Método findById: busca un usuario por su identificador único (id) en el repositorio.
   // - Parámetro 'id': un número que representa el identificador único del usuario a buscar.
