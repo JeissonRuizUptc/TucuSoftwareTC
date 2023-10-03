@@ -1,9 +1,11 @@
 import react from 'react';
+import LoginPage from './Pages/LoginPage';
+import RegisterPager from './Pages/RegisterPage';
 
 function App() {
   return (
     <div className="app">
-        <h1>Hola xd</h1>
+        <RegisterPager />
     </div>
   );
 }

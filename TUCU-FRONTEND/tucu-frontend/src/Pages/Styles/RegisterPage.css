@@ -1,0 +1,138 @@
+.RegisterContainer {
+    width: 100%;
+    height: 100vh;
+    background: #E8F6EF;
+    display: flex;
+    flex-direction: column;
+}
+
+.Register-Nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    height: 108px;
+    flex-shrink: 0;
+    background: #4C4C6D;
+}
+
+.Register-Nav h1 {
+    width: 279px;
+    height: 71px;
+    flex-shrink: 0;
+    color: #FFE194;
+    text-align: center;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.Register-Nav button {
+    position: absolute;
+    right: 50px;
+    width: 294px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #5E6E82;
+    text-align: center;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    color: #E8F6EF;
+}
+
+.Register-Section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Register-Section__Form {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 900px;
+    height: 800px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    background: #FFFFFF;
+}
+
+.Register-Section__Form h1 {
+    color: #4C4C6D;
+    text-align: center;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 1rem;
+}
+
+.Register-Section__Form label {
+    color: #4C4C6D;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.Register-Section__Form input {
+    width: 250.489px;
+    height: 32.003px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    border: 1px solid #5E6E82;
+    background: rgba(76, 76, 109, 0.10);
+}
+
+.Register-Section__Form button {
+    width: 300px;
+    height: 45px;
+    color: #FFFFFF;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #4C4C6D;
+    align-content: center;
+}
+
+.Register-Section__Card {
+    width: 340px;
+    height: 425px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    padding: 0 0.5rem;
+    background: #1B9C85;
+    margin-left: 10rem;
+    margin-bottom: 15rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.Register-Section__Card h1 {
+    color: #E8F6EF;
+    text-align: center;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.Register-Section__Card p {
+    color: #E8F6EF;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
