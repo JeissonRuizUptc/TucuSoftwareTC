@@ -1,0 +1,109 @@
+-- CreateTable
+CREATE TABLE `PLACES` (
+    `idPLACES` INTEGER NOT NULL AUTO_INCREMENT,
+    `city` VARCHAR(191) NOT NULL,
+    `province` VARCHAR(191) NOT NULL,
+    `country` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`idPLACES`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ROLES` (
+    `idROLES` INTEGER NOT NULL,
+    `roleName` INTEGER NOT NULL,
+    `description_role` VARCHAR(191) NULL,
+
+    PRIMARY KEY (`idROLES`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `STORES` (
+    `idStores` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `nit` INTEGER NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
+    `telephone_number` VARCHAR(191) NOT NULL,
+    `id_place_fk` INTEGER NOT NULL,
+
+    PRIMARY KEY (`idStores`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `USERS` (
+    `idUSERS` INTEGER NOT NULL,
+    `username` VARCHAR(191) NOT NULL,
+    `firstname` VARCHAR(191) NOT NULL,
+    `surname` VARCHAR(191) NOT NULL,
+    `enabled` INTEGER NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `timestamp` DATETIME(3) NOT NULL,
+    `id_stores_fk` INTEGER NOT NULL,
+    `id_roles_fk` INTEGER NOT NULL,
+
+    PRIMARY KEY (`idUSERS`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `DELIVERYMEN` (
+    `idDELIVERYMEN` INTEGER NOT NULL,
+    `surname` VARCHAR(191) NOT NULL,
+    `enabled` INTEGER NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `drivers_license` BOOLEAN NOT NULL,
+    `soat` VARCHAR(191) NOT NULL,
+    `tm_and_g_inspection_certificate` BOOLEAN NOT NULL,
+    `timestamp` DATETIME(3) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
+    `id_placess_fk` INTEGER NOT NULL,
+
+    PRIMARY KEY (`idDELIVERYMEN`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `DELIVERIES` (
+    `idDELIVERIES` INTEGER NOT NULL,
+    `destination_addres` VARCHAR(191) NOT NULL,
+    `timestamp` VARCHAR(191) NOT NULL,
+    `preparation_time` VARCHAR(191) NOT NULL,
+    `state` INTEGER NOT NULL,
+    `id_users_fk` INTEGER NOT NULL,
+    `id_stores_fk` INTEGER NOT NULL,
+    `id_deliverymen_fk` INTEGER NOT NULL,
+
+    PRIMARY KEY (`idDELIVERIES`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `HISTORIES` (
+    `idHISTORIES` INTEGER NOT NULL AUTO_INCREMENT,
+    `action` VARCHAR(191) NOT NULL,
+    `modified_at` VARCHAR(191) NOT NULL,
+    `id_delivey_fk` INTEGER NOT NULL,
+
+    PRIMARY KEY (`idHISTORIES`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `STORES` ADD CONSTRAINT `STORES_id_place_fk_fkey` FOREIGN KEY (`id_place_fk`) REFERENCES `PLACES`(`idPLACES`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `USERS` ADD CONSTRAINT `USERS_id_stores_fk_fkey` FOREIGN KEY (`id_stores_fk`) REFERENCES `STORES`(`idStores`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `USERS` ADD CONSTRAINT `USERS_id_roles_fk_fkey` FOREIGN KEY (`id_roles_fk`) REFERENCES `ROLES`(`idROLES`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DELIVERYMEN` ADD CONSTRAINT `DELIVERYMEN_id_placess_fk_fkey` FOREIGN KEY (`id_placess_fk`) REFERENCES `PLACES`(`idPLACES`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DELIVERIES` ADD CONSTRAINT `DELIVERIES_id_users_fk_fkey` FOREIGN KEY (`id_users_fk`) REFERENCES `USERS`(`idUSERS`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DELIVERIES` ADD CONSTRAINT `DELIVERIES_id_stores_fk_fkey` FOREIGN KEY (`id_stores_fk`) REFERENCES `STORES`(`idStores`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DELIVERIES` ADD CONSTRAINT `DELIVERIES_id_deliverymen_fk_fkey` FOREIGN KEY (`id_deliverymen_fk`) REFERENCES `DELIVERYMEN`(`idDELIVERYMEN`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `HISTORIES` ADD CONSTRAINT `HISTORIES_id_delivey_fk_fkey` FOREIGN KEY (`id_delivey_fk`) REFERENCES `DELIVERIES`(`idDELIVERIES`) ON DELETE RESTRICT ON UPDATE CASCADE;
