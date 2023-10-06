@@ -15,6 +15,7 @@ model PLACES {
   city        String
   province    String
   country     String
+
   STORES      STORES[]
   DELIVERYMEN DELIVERYMEN[]
 }
@@ -42,6 +43,7 @@ model USERS {
   idUSERS      Int          @id
   username     String
   firstname    String
+  password     String
   surname      String
   enabled      Int
   email        String

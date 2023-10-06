@@ -23,11 +23,11 @@ export class UserService{
         ): Promise<User> {
 
             //store
+            
             const user: User = new User(id_user, email,
                 username,password,
                 firstName, surName,
                 id_store, 1);
-            // Espera a que la promesa se resuelva y devuelve el usuario agregado.
             return await this.userRepository.addUser(user);
         }
     

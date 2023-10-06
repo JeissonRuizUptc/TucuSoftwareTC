@@ -11,7 +11,7 @@ export class User {
   private password: Password; // Objeto Password que representa la contraseña del usuario
   private firstName: string; // Nombre del usuario
   private surName: string; // Apellido del usuario
-  private enable: boolean; // Indica si el usuario está habilitado o no
+  private enable: number; // Indica si el usuario está habilitado o no
   private id_store: number; // Identificador de la tienda asociada al usuario
   private id_roles: number; // Identificador de los roles del usuario
 
@@ -43,7 +43,7 @@ export class User {
     this.password = new Password(password); // Inicializa el objeto Password con la contraseña proporcionada.
     this.firstName = firstName;
     this.surName = surName;
-    this.enable = true; // Por defecto, el usuario está habilitado.
+    this.enable = id_roles; // Por defecto, el usuario está habilitado.
     this.id_store = id_store;
     this.id_roles = id_roles;
   }
@@ -98,10 +98,10 @@ export class User {
 
   /**
    * Método para verificar si el usuario está habilitado.
-   * @returns {boolean} - true si el usuario está habilitado, false si no lo está.
+   * @returns {number} - 1 si el usuario está habilitado, 0 si no lo está.
    */
-  isUserEnable(): boolean {
-    return this.enable;
+  isUserEnable(): number {
+    return this.enable; // Compara si el valor de "enable" es igual a 1 para determinar si está habilitado.
   }
 
   /**
@@ -130,9 +130,9 @@ export class User {
 
   /**
    * Método para habilitar o deshabilitar al usuario.
-   * @param {boolean} enable - true para habilitar al usuario, false para deshabilitarlo.
+   * @param {number} enable - 1 para habilitar al usuario, 0 para deshabilitarlo.
    */
-  setUserEnable(enable: boolean): void {
-    this.enable = enable; // Actualiza el estado de habilitación del usuario.
+  setUserEnable(enable: number): void {
+    this.enable = enable;
   }
 }
