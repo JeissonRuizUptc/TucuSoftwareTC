@@ -9,7 +9,7 @@ export class UserRepositoryPrisma implements IUserRepository{
             data: {
                 idUSERS: user.getId(),
                 username: user.getUsername(),
-                //password: user.getPassword(),
+                password: user.getPassword(),
                 firstname: user.getFirstName(),
                 surname: user.getSurname(),
                 enabled: user.isUserEnable(),
