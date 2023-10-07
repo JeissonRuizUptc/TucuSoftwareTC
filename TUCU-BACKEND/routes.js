@@ -228,91 +228,94 @@ router.post('/newRol', async (req, res) => {
         }
     });
     */
-    //LOGIN FARID
-    router.post('/login', async (req, res) => {
-        const { email, password } = req.body;
-        const get = await prisma.USERS.findMany({
+    // //LOGIN FARID DEL ECOMMERCE
+    // router.post('/login', async (req, res) => {
+    //     const { email, password } = req.body;
+    //     const get = await prisma.USERS.findMany({
     
-            where: {
-                "email": EMAIL
-            }
-        })
-        const getPassword = await prisma.autentication.findMany({
-            where: {
-                "ID_USUARIO": get[0].ID_USUARIOS
-            }
-        })
-        if (get.length > 0 && await bcryptjs.compare(PASSWORD, getPassword[0].HASH)) {
-            const token = jwt.sign({ id: get[0].ID_USUARIOS }, "Secret_word", {
-                expiresIn: "1h"
-            })
+    //         where: {
+    //             "email": EMAIL
+    //         }
+    //     })
+    //     const getPassword = await prisma.autentication.findMany({
+    //         where: {
+    //             "ID_USUARIO": get[0].ID_USUARIOS
+    //         }
+    //     })
+    //     if (get.length > 0 && await bcryptjs.compare(PASSWORD, getPassword[0].HASH)) {
+    //         const token = jwt.sign({ id: get[0].ID_USUARIOS }, "Secret_word", {
+    //             expiresIn: "1h"
+    //         })
     
-            const userol = await prisma.ussers_rol.findMany({
-                where: {
-                    "ID_USUARIOS": get[0].ID_USUARIOS
-                }
-            })
+    //         const userol = await prisma.ussers_rol.findMany({
+    //             where: {
+    //                 "ID_USUARIOS": get[0].ID_USUARIOS
+    //             }
+    //         })
     
-            const rol = await prisma.rol.findMany({
-                where: {
-                    "ID_ROL": userol[0].ID_ROL
-                }
-            })
+    //         const rol = await prisma.rol.findMany({
+    //             where: {
+    //                 "ID_ROL": userol[0].ID_ROL
+    //             }
+    //         })
     
-            res.status(200).json(
-                {
-                    token: token, rol: rol[0].NAME, name: get[0].NAME
-                })
-        }
-        // if (!EMAIL || !PASSWORD) return res.sendStatus(400)
-        //res.status(200).json({token:token})
-        // try {
-        //     const { guid } = authByEmailPwd(EMAIL, PASSWORD)
-        //     const jwt = jwtConstructor.setProtectedHeader({ alg: 'hs256', typ: 'jwt' })
-        //         .setIssuedAt()
-        //         .setExpirationTime('1h').sign(procces.HASH)
+    //         res.status(200).json(
+    //             {
+    //                 token: token, rol: rol[0].NAME, name: get[0].NAME
+    //             })
+    //     }
+    //     // if (!EMAIL || !PASSWORD) return res.sendStatus(400)
+    //     //res.status(200).json({token:token})
+    //     // try {
+    //     //     const { guid } = authByEmailPwd(EMAIL, PASSWORD)
+    //     //     const jwt = jwtConstructor.setProtectedHeader({ alg: 'hs256', typ: 'jwt' })
+    //     //         .setIssuedAt()
+    //     //         .setExpirationTime('1h').sign(procces.HASH)
     
-        // } catch (error) {
-        //     return res.sendStatus(401)
-        // }
-    })
+    //     // } catch (error) {
+    //     //     return res.sendStatus(401)
+    //     // }
+    // })
 
 
-// //login realizado el sabado por Farid xd 
-// router.post('/login', async (req, res) => {
-//     try {
-//       const { username, password } = req.body;
+//login realizado el sabado por Farid xd 
+router.post('/login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
   
-//       // Validación de datos
-//       if (!username || !password) {
-//         return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios.' });
-//       }
+      // Validación de datos
+      if (!username || !password) {
+        return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios.' });
+      }
   
-//       // Buscar al usuario por nombre de usuario en la base de datos
-//       const user = await prisma.USERS.findUnique({
-//         where: { username },
-//       });
+      // Buscar al usuario por nombre de usuario en la base de datos
+      const user = await prisma.USERS.findFirst({
+        where: {
+          username: "Falex01", // Nombre de usuario a buscar
+        },
+      });
   
-//       if (!user) {
-//         return res.status(401).json({ error: 'Credenciales incorrectas.' });
-//       }
+      if (!user) {
+        return res.status(401).json({ error: 'Credenciales incorrectas.' });
+      }
   
-//       // Comparar la contraseña ingresada con la contraseña almacenada en la base de datos
-//       const passwordMatch = await bcrypt.compare(password, user.password);
+      // Comparar la contraseña ingresada con la contraseña almacenada en la base de datos
+      const passwordMatch = await bcrypt.compare(password, user.password);
   
-//       if (!passwordMatch) {
-//         return res.status(401).json({ error: 'Credenciales incorrectas.' });
-//       }
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Credenciales incorrectas.' });
+        
+      }
   
-//       // Generar un token JWT para el usuario
-//       const token = jwt.sign({ userId: user.idUSERS }, 'tu_secreto_secreto', { expiresIn: '1h' });
+      // Generar un token JWT para el usuario
+      const token = jwt.sign({ userId: user.idUSERS }, 'tu_secreto_secreto', { expiresIn: '1h' });
   
-//       res.status(200).json({ message: 'Inicio de sesión exitoso', token });
-//     } catch (error) {
-//       console.error('Error al iniciar sesión:', error);
-//       res.status(500).json({ error: 'Se produjo un error al iniciar sesión.' });
-//     }
-//   });
+      res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      res.status(500).json({ error: 'Se produjo un error al iniciar sesión.' });
+    }
+  });
 
    function getPhoneNumberRegexForCountry(countryCode) {
     // Implementa lógica para devolver la expresión regular según el código de país
