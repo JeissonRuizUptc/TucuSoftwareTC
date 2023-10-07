@@ -278,6 +278,41 @@ router.post('/newRol', async (req, res) => {
     })
 
 
+// //login realizado el sabado por Farid xd 
+// router.post('/login', async (req, res) => {
+//     try {
+//       const { username, password } = req.body;
+  
+//       // Validación de datos
+//       if (!username || !password) {
+//         return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios.' });
+//       }
+  
+//       // Buscar al usuario por nombre de usuario en la base de datos
+//       const user = await prisma.USERS.findUnique({
+//         where: { username },
+//       });
+  
+//       if (!user) {
+//         return res.status(401).json({ error: 'Credenciales incorrectas.' });
+//       }
+  
+//       // Comparar la contraseña ingresada con la contraseña almacenada en la base de datos
+//       const passwordMatch = await bcrypt.compare(password, user.password);
+  
+//       if (!passwordMatch) {
+//         return res.status(401).json({ error: 'Credenciales incorrectas.' });
+//       }
+  
+//       // Generar un token JWT para el usuario
+//       const token = jwt.sign({ userId: user.idUSERS }, 'tu_secreto_secreto', { expiresIn: '1h' });
+  
+//       res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+//     } catch (error) {
+//       console.error('Error al iniciar sesión:', error);
+//       res.status(500).json({ error: 'Se produjo un error al iniciar sesión.' });
+//     }
+//   });
 
    function getPhoneNumberRegexForCountry(countryCode) {
     // Implementa lógica para devolver la expresión regular según el código de país
