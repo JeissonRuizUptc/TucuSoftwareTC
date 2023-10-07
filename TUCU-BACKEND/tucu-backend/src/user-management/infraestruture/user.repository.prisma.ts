@@ -5,12 +5,12 @@ import { IUserRepository } from "../domain/interfaces/user.interface";
 export class UserRepositoryPrisma implements IUserRepository{
     
     public async addUser(user: User): Promise<User> {
-        return await prisma.uSERS .create({
-            data: {
+        return await prisma.uSERS.create({
+            data: { 
                 idUSERS: user.getId(),
-                username: user.getUsername(),
-                password: user.getPassword(),
+                username: user.getUsername(),                
                 firstname: user.getFirstName(),
+                password: user.getPassword().getValue(),
                 surname: user.getSurname(),
                 enabled: user.isUserEnable(),
                 email: user.getEmail().getValue(), 
