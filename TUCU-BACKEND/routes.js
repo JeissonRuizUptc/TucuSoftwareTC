@@ -144,7 +144,7 @@ router.post('/newRol', async (req, res) => {
   //Crear nuevo usuario
   router.post('/newUser', async (req, res) => {
     try {
-        const { idUSERS,username, firstname, password, surname, enabled, email, id_stores_fk, id_roles_fk } = req.body;
+        const { idUSERS, username, firstname, password, surname, enabled, email, id_stores_fk, id_roles_fk } = req.body;
 
         // Validación de datos
         if (!idUSERS || !username || !firstname || !password || !surname || !enabled || !email || !id_stores_fk || !id_roles_fk) {
@@ -185,99 +185,6 @@ router.post('/newRol', async (req, res) => {
     }
 });
 
-//Inicion de sesion 
-/*
-    router.post('/login', async (req, res) => {
-        try {
-            const { email, password } = req.body;
-
-            // Validación de datos
-            if (!email || !password) {
-                return res.status(400).json({ error: 'Correo electrónico y contraseña son obligatorios.' });
-            }
-
-            // Buscar usuario por correo electrónico
-            const user = await prisma.users.findUnique({
-                where: { email },
-            });
-
-            // Verificar si el usuario existe
-            if (!user) {
-                return res.status(401).json({ error: 'Usuario no encontrado.' });
-            }
-
-            // Verificar la contraseña
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-
-            if (!isPasswordValid) {
-                return res.status(401).json({ error: 'Contraseña incorrecta.' });
-            }
-
-            // Generar un token JWT
-            const token = jwt.sign(
-                { userId: user.idUSERS, username: user.username, email: user.email },
-                'your-secret-key',  // Reemplaza con tu clave secreta
-                { expiresIn: '1h' }  // Opcional: tiempo de expiración del token
-            );
-
-            // Devolver el token como parte de la respuesta
-            res.status(200).json({ message: 'Inicio de sesión exitoso', token });
-        } catch (error) {
-            console.error('Error en el proceso de inicio de sesión:', error);
-            res.status(500).json({ error: 'Se produjo un error en el inicio de sesión.' });
-        }
-    });
-    */
-    // //LOGIN FARID DEL ECOMMERCE
-    // router.post('/login', async (req, res) => {
-    //     const { email, password } = req.body;
-    //     const get = await prisma.USERS.findMany({
-    
-    //         where: {
-    //             "email": EMAIL
-    //         }
-    //     })
-    //     const getPassword = await prisma.autentication.findMany({
-    //         where: {
-    //             "ID_USUARIO": get[0].ID_USUARIOS
-    //         }
-    //     })
-    //     if (get.length > 0 && await bcryptjs.compare(PASSWORD, getPassword[0].HASH)) {
-    //         const token = jwt.sign({ id: get[0].ID_USUARIOS }, "Secret_word", {
-    //             expiresIn: "1h"
-    //         })
-    
-    //         const userol = await prisma.ussers_rol.findMany({
-    //             where: {
-    //                 "ID_USUARIOS": get[0].ID_USUARIOS
-    //             }
-    //         })
-    
-    //         const rol = await prisma.rol.findMany({
-    //             where: {
-    //                 "ID_ROL": userol[0].ID_ROL
-    //             }
-    //         })
-    
-    //         res.status(200).json(
-    //             {
-    //                 token: token, rol: rol[0].NAME, name: get[0].NAME
-    //             })
-    //     }
-    //     // if (!EMAIL || !PASSWORD) return res.sendStatus(400)
-    //     //res.status(200).json({token:token})
-    //     // try {
-    //     //     const { guid } = authByEmailPwd(EMAIL, PASSWORD)
-    //     //     const jwt = jwtConstructor.setProtectedHeader({ alg: 'hs256', typ: 'jwt' })
-    //     //         .setIssuedAt()
-    //     //         .setExpirationTime('1h').sign(procces.HASH)
-    
-    //     // } catch (error) {
-    //     //     return res.sendStatus(401)
-    //     // }
-    // })
-
-
 //login realizado el sabado por Farid xd 
 router.post('/login', async (req, res) => {
     try {
@@ -317,15 +224,16 @@ router.post('/login', async (req, res) => {
     }
   });
 
-   function getPhoneNumberRegexForCountry(countryCode) {
-    // Implementa lógica para devolver la expresión regular según el código de país
-    // Por ejemplo, para Colombia (Código de país: CO):
-    if (countryCode === 'CO') {
-        return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
-    }
-    // Agrega más lógica para otros países según sea necesario
+    function getPhoneNumberRegexForCountry(countryCode) {
+      if (countryCode === 'CO') {
+          return /^\+[0-9]{1,3}-?[0-9]{1,14}$/; // Expresión regular para Colombia
+      } else if (countryCode === 'MX') {
+          return /^\+[0-9]{1,3}-?[0-9]{1,10}$/; // Expresión regular para México
+      } else if (countryCode === 'AR') {
+          return /^\+[0-9]{1,3}-?[0-9]{1,13}$/; // Expresión regular para Argentina
+      }
 
-    // Por defecto, devuelve una expresión regular general
+    // Expresión regular general por defecto
     return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
 }
     
