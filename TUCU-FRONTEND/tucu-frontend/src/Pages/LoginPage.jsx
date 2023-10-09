@@ -8,20 +8,38 @@ const LoginPage = () => {
     const [error, setError] = useState(""); // Estado para mensajes de error
 
     // Función para manejar el envío del formulario
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Aquí puedes realizar la validación de usuario y contraseña
-        const user = userData.find((user) => user.username === username);
-        // Por ejemplo, puedes comparar los valores con una base de datos o valores predefinidos.
+        // Realiza una llamada a la API para verificar las credenciales
+        try {
+            const response = await fetch("http://localhost:3200/api/login", {
+                method: "POST", // o "GET" dependiendo de tu API
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
-        if (user && user.password === password) {
-            // Si las credenciales son válidas, puedes redirigir o realizar alguna acción deseada
-            console.log("Inicio de sesión exitoso");
-            setError("");
-        } else {
-            // Si las credenciales no son válidas, muestra un mensaje de error
-            setError("Credenciales incorrectas");
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    // Si las credenciales son válidas, puedes redirigir o realizar alguna acción deseada
+                    setError("");
+                    console.log("Inicio de sesión exitoso");
+                    
+                } else {
+                    // Si las credenciales no son válidas, muestra un mensaje de error
+                    setError("");
+                    setError("Credenciales incorrectas");
+                }
+            } else {
+                setError("");
+                setError("Error en la solicitud");
+            }
+        } catch (error) {
+            console.error("Error de red:", error);
+            setError("Error de red");
         }
     };
 

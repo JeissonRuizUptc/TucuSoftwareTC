@@ -14,7 +14,7 @@ const RegisterPager = () => {
         passwordVerified: "",
         legalName: "",
         commercialName: "",
-        nit: "",
+        nit: 0,
         contactNumber: "",
         address: "",
         addressDetails: "",
@@ -29,17 +29,59 @@ const RegisterPager = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Aquí puedes convertir formData a JSON
-        const updatedData = { ...formData };
+        // Crear un objeto para enviar a Endpoint 1
+        const endpoint1Data = {
+            idUSERS: parseInt(formData.nit),
+            username: formData.userName,
+            firstname: formData.firstName,
+            password: formData.password,
+            surname: formData.lastName,
+            enabled: 1,
+            email: formData.email,
+            id_stores_fk: 1,
+            id_roles_fk: 1
+        };
 
-        console.log(updatedData);
+        // Crear un objeto para enviar a Endpoint 2
+        const endpoint2Data = {
+            name: formData.legalName,
+            nit: parseInt(formData.nit),
+            address: formData.address,
+            telephone_number: formData.contactNumber,
+            id_place_fk: 2
+        };
 
-        //userData.push(updatedData);
+        try {
+            // Enviar la solicitud al Endpoint 1
+            await axios.post('http://localhost:3200/api/newUser', endpoint1Data);
 
-    
+            // Enviar la solicitud al Endpoint 2
+            await axios.post('http://localhost:3200/api/newStore', endpoint2Data);
+
+            // Limpiar el formulario después de un envío exitoso
+            setFormData({
+                firstName: "",
+                lastName: "",
+                userName: "",
+                email: "",
+                password: "",
+                passwordVerified: "",
+                legalName: "",
+                commercialName: "",
+                nit: "",
+                contactNumber: "",
+                address: "",
+                addressDetails: "",
+                description: ""
+            });
+
+            console.log("Los datos se han enviado correctamente a ambos endpoints.");
+        } catch (error) {
+            console.error("Error al enviar los datos:", error);
+        }
     };
 
     return (
