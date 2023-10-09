@@ -238,7 +238,6 @@ router.post('/login', async (req, res) => {
 
     // Expresión regular general por defecto
     return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
-
 }
 
     module.exports = router
