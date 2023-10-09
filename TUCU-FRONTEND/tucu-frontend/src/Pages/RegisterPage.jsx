@@ -21,6 +21,9 @@ const RegisterPager = () => {
         description: ""
     });
 
+    const [nitError, setNitError] = useState("");
+    const [contactNumberError, setContactNumberError] = useState("");
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -227,7 +230,9 @@ const RegisterPager = () => {
                                     name="nit"
                                     value={formData.nit}
                                     onChange={handleChange} />
-                            </div>
+                                    {/* Mostrar mensaje de error */}
+                                {contactNumberError && <p className="text-red-500">{contactNumberError}</p>}
+                            </div>  
                             <div className="w-full md:w-1/2 px-3">
                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                                     Numero de contacto *
