@@ -87,7 +87,7 @@ router.post('/newPlace', async (req, res) => {
         //}
 
         // Validación de formato de número de teléfono por país
-        const phoneNumberRegex = getPhoneNumberRegexForCountry(id_place_fk);
+        const phoneNumberRegex = getPhoneNumberRegexForCountry(telephone_number);
 
         if (!phoneNumberRegex.test(telephone_number)) {
             return res.status(400).json({ error: 'Formato de número de teléfono inválido para el país seleccionado.' });
@@ -224,14 +224,17 @@ router.post('/login', async (req, res) => {
     }
   });
 
-    function getPhoneNumberRegexForCountry(countryCode) {
-      if (countryCode === 'CO') {
-          return /^\+[0-9]{1,3}-?[0-9]{1,14}$/; // Expresión regular para Colombia
-      } else if (countryCode === 'MX') {
-          return /^\+[0-9]{1,3}-?[0-9]{1,10}$/; // Expresión regular para México
-      } else if (countryCode === 'AR') {
-          return /^\+[0-9]{1,3}-?[0-9]{1,13}$/; // Expresión regular para Argentina
-      }
+  function getPhoneNumberRegexForCountry(phoneNumber) {
+    if (/^\+57[0-9]{10}$/.test(phoneNumber)) {
+        return 'CO';  // Colombia
+    } else if (/^\+52[0-9]{10}$/.test(phoneNumber)) {
+        return 'MX';  // México
+    } else if (/^\+54[0-9]{10}$/.test(phoneNumber)) {
+        return 'AR';  // Argentina
+    } else {
+        return 'Invalid';  // Número no válido para ninguno de los países
+    }
+}
 
     // Expresión regular general por defecto
     return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
