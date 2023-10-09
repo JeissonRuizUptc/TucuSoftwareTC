@@ -6,36 +6,47 @@ const LoginPage = () => {
     const [username, setUsername] = useState(""); // Estado para el nombre de usuario
     const [password, setPassword] = useState(""); // Estado para la contraseña
     const [error, setError] = useState(""); // Estado para mensajes de error
+    const [showPassword, setShowPassword] = useState(false); // Estado para mostrar u ocultar la contraseña
+    const [usernameError, setUsernameError] = useState(""); // Estado para el mensaje de error del usuario
+    const [passwordError, setPasswordError] = useState(""); // Estado para el mensaje de error de la contraseña
 
     // Función para manejar el envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validar que ambos campos estén completos
+        if (!username || !password) {
+            if (!username) setUsernameError("El campo de usuario es obligatorio.");
+            if (!password) setPasswordError("El campo de contraseña es obligatorio.");
+            return; // Detener el envío del formulario si hay errores
+        }
+
         // Realiza una llamada a la API para verificar las credenciales
         try {
+            // Restablecer los errores de validación
+            setUsernameError("");
+            setPasswordError("");
+
             const response = await fetch("http://localhost:3200/api/login", {
-                method: "POST", // o "GET" dependiendo de tu API
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ username, password }),
             });
 
-            if (response.ok) {
+            if (response.status === 200) {
                 const data = await response.json();
-                if (data.success) {
+                console.log(data);
+                if (data.message === "Inicio de sesión exitoso") {
                     // Si las credenciales son válidas, puedes redirigir o realizar alguna acción deseada
                     setError("");
-                    console.log("Inicio de sesión exitoso");
-                    
                 } else {
                     // Si las credenciales no son válidas, muestra un mensaje de error
-                    setError("");
-                    setError("Credenciales incorrectas");
+                    setError(data.message);
                 }
-            } else {
-                setError("");
-                setError("Error en la solicitud");
+            } else if (response.status === 401) {
+                setError("Credenciales incorrectas");
             }
         } catch (error) {
             console.error("Error de red:", error);
@@ -61,21 +72,37 @@ const LoginPage = () => {
                                 type="text"
                                 placeholder="Username"
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(e) => {
+                                    setUsername(e.target.value);
+                                    setUsernameError(""); // Limpiar el mensaje de error al cambiar el valor
+                                }}
                             />
+                            {usernameError && <p className="text-red-500">{usernameError}</p>}
                         </div>
                         <div className="mb-6">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                                 Contraseña
                             </label>
-                            <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                id="password"
-                                type="password"
-                                placeholder="**********"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <div className="relative">
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="**********"
+                                    value={password}
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                        setPasswordError(""); // Limpiar el mensaje de error al cambiar el valor
+                                    }}
+                                />
+                                <span
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? "Ocultar" : "Mostrar"}
+                                </span>
+                            </div>
+                            {passwordError && <p className="text-red-500">{passwordError}</p>}
                         </div>
 
                         <div className="flex items-center mb-4">
@@ -99,7 +126,7 @@ const LoginPage = () => {
                             </button>
                         </div>
                         <p className="register">
-                            ¿Aún no tienes una cuenta? <a href="">Regístrate</a>
+                            ¿Aún no tienes una cuenta? <a href="/registro">Regístrate</a>
                         </p>
                     </form>
                 </div>
