@@ -198,7 +198,7 @@ router.post('/login', async (req, res) => {
       // Buscar al usuario por nombre de usuario en la base de datos
       const user = await prisma.USERS.findFirst({
         where: {
-          username: "Falex01", // Nombre de usuario a buscar
+          username: username, // Nombre de usuario a buscar
         },
       });
   
