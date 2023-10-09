@@ -234,11 +234,11 @@ router.post('/login', async (req, res) => {
     } else {
         return 'Invalid';  // Número no válido para ninguno de los países
     }
-}
+
 
     // Expresión regular general por defecto
-    //return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
+    return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
 
-//}
+}
 
     module.exports = router
