@@ -1,0 +1,75 @@
+.dashboardContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+}
+
+
+
+
+.dashboardNav {
+    width: 20%;
+    height: 100vh;
+    background-color: #4C4C6D;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboardNav {
+    display: flex;
+    width: 20%;
+    height: 100vh;
+    background-color: #4C4C6D;
+}
+
+
+.dashboardNav h1 {
+    margin-bottom: 10rem;
+    color: #FFE194;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+}
+
+.dashboardNav-items p {
+    margin: 1.5rem 0;
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 24px;
+    font-style: normal;
+    text-align: center;
+    /* 0% */
+}
+
+.dashboardHeader {
+    display: flex;
+    background-color: #1B9C85;
+    width: 80%;
+    height: 10vh;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.dashboardHeader h1 {
+    color: #E8F6EF;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 2.5rem;
+    font-style: normal;
+    /* 52.5% */
+    text-transform: capitalize;
+}
+
+.dashboardSection{
+    display: flex;
+    width: 80%;
+    height: vh;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
