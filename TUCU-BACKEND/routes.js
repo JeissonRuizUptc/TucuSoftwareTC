@@ -132,7 +132,7 @@ router.post('/newRol', async (req, res) => {
         data: {
             idROLES,
             roleName, 
-            description_role 
+            description_role  
         },
       });
   
@@ -331,10 +331,11 @@ const newPedido = await prisma.DELIVERIES.create({
     } else {
         return 'Invalid';  // Número no válido para ninguno de los países
     }
-
+ 
+}
 
     // Expresión regular general por defecto
     return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
-}
+
 
     module.exports = router
