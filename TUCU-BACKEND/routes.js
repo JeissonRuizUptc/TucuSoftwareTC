@@ -251,7 +251,44 @@ router.post('/login', async (req, res) => {
       });
     }
   }
-  
+  // Ruta para crear un nuevo pedido (DELIVERY)
+router.post('/createPedido', async (req, res) => {
+  try {
+    // Obtener los datos del pedido del cuerpo de la solicitud
+    const {
+      destination_address,
+      preparation_time,
+      state,
+      id_users_fk,       // ID del usuario relacionado con el pedido
+      id_stores_fk,      // ID de la tienda relacionada con el pedido
+      id_deliverymen_fk, // ID del repartidor relacionado con el pedido
+    } = req.body;
+
+    // Validación de datos (agrega las validaciones necesarias según tus requisitos)
+    if (!destination_address || !preparation_time || !state || !id_users_fk || !id_stores_fk || !id_deliverymen_fk) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
+
+    // Crear el pedido en la base de datos
+    const newPedido = await prisma.DELIVERIES.create({
+      data: {
+        destination_address,
+        preparation_time,
+        state,
+        id_users_fk,
+        id_stores_fk,
+        id_deliverymen_fk,
+      },
+    });
+
+    // Respondemos con el pedido recién creado
+    res.status(201).json(newPedido);
+  } catch (error) {
+    console.error('Error al crear el pedido:', error);
+    res.status(500).json({ error: 'Se produjo un error al crear el pedido.' });
+  }
+});
+
 // Ruta para crear un nuevo pedido (DELIVERY)
 router.post('/createPedido', async (req, res) => {
   try {
