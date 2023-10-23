@@ -10,6 +10,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs');
 const app = express();
 app.use(bodyParser.json());
+const { Client } = require('@googlemaps/google-maps-services-js');
+const googleMapsClient = new Client({ apiKey: 'TU_CLAVE_DE_API' });
+
 
 router.use(cors({
     origin: '*'
@@ -224,6 +227,57 @@ router.post('/login', async (req, res) => {
     }
   });
 
+  app.get('/getDomiciliarioLocation/:domiciliarioId', (req, res) => {
+    // Obtener las coordenadas en tiempo real de acuerdo al domiciliarioId
+    const domiciliarioId = req.params.domiciliarioId;
+    
+    // Simula obtener las coordenadas en tiempo real (reemplaza esto con tu lógica real)
+    const lat = 12.345678;
+    const lng = -45.678901;
+  
+    // Enviar las coordenadas al cliente usando WebSockets (socket.io)
+    io.emit(`location_${domiciliarioId}`, { lat, lng });
+    res.send('Ubicación en tiempo real enviada');
+  });
+    // Generar la ubicacion del domiciliario
+  function obtenerUbicacionDomiciliario() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+  
+        // Actualizar el mapa con las nuevas coordenadas
+        actualizarMapa(lat, lng);
+      });
+    }
+  }
+  // Actualizar la ubicacion del domiciliario
+  function actualizarMapa(lat, lng) {
+    // Verificar si la API de Google Maps se ha cargado
+    if (typeof google === 'object' && typeof google.maps === 'object') {
+      // Coordenadas
+      const ubicacion = { lat, lng };
+  
+      // Opciones de mapa
+      const mapOptions = {
+        zoom: 15, // Nivel de zoom (ajusta según tus necesidades)
+        center: ubicacion, // Centra el mapa en la nueva ubicación
+      };
+  
+      // Crear un nuevo mapa en el elemento HTML con ID "map"
+      const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  
+      // Crear un marcador en la ubicación
+      const marker = new google.maps.Marker({
+        position: ubicacion,
+        map: map,
+        title: 'Ubicación del domiciliario',
+      });
+    } else {
+      console.log('La API de Google Maps no está cargada.');
+    }
+  }
+  
   function getPhoneNumberRegexForCountry(phoneNumber) {
     if (/^\+57[0-9]{10}$/.test(phoneNumber)) {
         return 'CO';  // Colombia
