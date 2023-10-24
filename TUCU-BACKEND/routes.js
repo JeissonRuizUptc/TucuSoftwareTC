@@ -18,7 +18,100 @@ router.use(cors({
     origin: '*'
 }));
 
-// Exporta el router para que pueda ser utilizado como middleware en tu aplicación principal
+//Endpoints direcciones 
+//Endpoints usuarios
+ //Crear nuevo usuario
+ router.post('/newUser', async (req, res) => {
+  try {
+      const { idUSERS, username, firstname, password, surname, enabled, email, id_stores_fk, id_roles_fk } = req.body;
+
+      // Validación de datos
+      if (!idUSERS || !username || !firstname || !password || !surname || !enabled || !email || !id_stores_fk || !id_roles_fk) {
+          return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+      }
+
+      // Validación de formato de correo
+      if (!email.includes('@')) {
+          return res.status(400).json({ error: 'El correo electrónico debe contener @.' });
+      }
+
+      // Encriptar la contraseña con bcrypt
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = await prisma.USERS.create({
+          data: {
+              idUSERS,
+              username,
+              firstname,
+              password: hashedPassword,
+              surname,
+              enabled,
+              email,
+              id_stores_fk,
+              id_roles_fk
+          },
+      });
+
+      console.log(newUser);
+
+      // Devuelve una respuesta exitosa con el nuevo usuario creado
+      res.status(201).json({ message: 'Usuario creado exitosamente', user: newUser });
+  } catch (error) {
+      console.error('Error al crear el usuario:', error);
+
+      // Devuelve una respuesta de error
+      res.status(500).json({ error: 'Se produjo un error al crear el usuario.' });
+  }
+});
+//login realizado el sabado por Farid xd 
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Validación de datos
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios.' });
+    }
+
+    // Buscar al usuario por nombre de usuario en la base de datos
+    const user = await prisma.USERS.findFirst({
+      where: {
+        username: username, // Nombre de usuario a buscar
+      },
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciales incorrectas.' });
+    }
+
+    // Comparar la contraseña ingresada con la contraseña almacenada en la base de datos
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Credenciales incorrectas.' });
+      
+    }
+
+    // Generar un token JWT para el usuario
+    const token = jwt.sign({ userId: user.idUSERS }, 'tu_secreto_secreto', { expiresIn: '1h' });
+
+    res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).json({ error: 'Se produjo un error al iniciar sesión.' });
+  }
+});
+
+
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+// Endpoints a modificar
 
 
 // Crear un nuevo lugar
@@ -144,88 +237,9 @@ router.post('/newRol', async (req, res) => {
     }
   });
 
-  //Crear nuevo usuario
-  router.post('/newUser', async (req, res) => {
-    try {
-        const { idUSERS, username, firstname, password, surname, enabled, email, id_stores_fk, id_roles_fk } = req.body;
+ 
 
-        // Validación de datos
-        if (!idUSERS || !username || !firstname || !password || !surname || !enabled || !email || !id_stores_fk || !id_roles_fk) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
-        }
 
-        // Validación de formato de correo
-        if (!email.includes('@')) {
-            return res.status(400).json({ error: 'El correo electrónico debe contener @.' });
-        }
-
-        // Encriptar la contraseña con bcrypt
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = await prisma.USERS.create({
-            data: {
-                idUSERS,
-                username,
-                firstname,
-                password: hashedPassword,
-                surname,
-                enabled,
-                email,
-                id_stores_fk,
-                id_roles_fk
-            },
-        });
-
-        console.log(newUser);
-
-        // Devuelve una respuesta exitosa con el nuevo usuario creado
-        res.status(201).json({ message: 'Usuario creado exitosamente', user: newUser });
-    } catch (error) {
-        console.error('Error al crear el usuario:', error);
-
-        // Devuelve una respuesta de error
-        res.status(500).json({ error: 'Se produjo un error al crear el usuario.' });
-    }
-});
-
-//login realizado el sabado por Farid xd 
-router.post('/login', async (req, res) => {
-    try {
-      const { username, password } = req.body;
-  
-      // Validación de datos
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios.' });
-      }
-  
-      // Buscar al usuario por nombre de usuario en la base de datos
-      const user = await prisma.USERS.findFirst({
-        where: {
-          username: username, // Nombre de usuario a buscar
-        },
-      });
-  
-      if (!user) {
-        return res.status(401).json({ error: 'Credenciales incorrectas.' });
-      }
-  
-      // Comparar la contraseña ingresada con la contraseña almacenada en la base de datos
-      const passwordMatch = await bcrypt.compare(password, user.password);
-  
-      if (!passwordMatch) {
-        return res.status(401).json({ error: 'Credenciales incorrectas.' });
-        
-      }
-  
-      // Generar un token JWT para el usuario
-      const token = jwt.sign({ userId: user.idUSERS }, 'tu_secreto_secreto', { expiresIn: '1h' });
-  
-      res.status(200).json({ message: 'Inicio de sesión exitoso', token });
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      res.status(500).json({ error: 'Se produjo un error al iniciar sesión.' });
-    }
-  });
 
   app.get('/getDomiciliarioLocation/:domiciliarioId', (req, res) => {
     // Obtener las coordenadas en tiempo real de acuerdo al domiciliarioId
