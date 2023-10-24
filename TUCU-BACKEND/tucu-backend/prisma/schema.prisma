@@ -93,19 +93,19 @@ model USERS {
 }
 
 model DELIVERIES {
-  idDELIVERIES         Int         @id
-  timestamp            String
-  preparation_time     String
-  state                Int
-  id_users_fk          Int
-  id_stores_fk         Int
-  id_deliverymen_fk    Int
-  id_address_fk        Int
-  USERS                USERS       @relation(fields: [id_users_fk], references: [idUSERS])
-  STORES               STORES      @relation(fields: [id_stores_fk], references: [idStores])
-  DELIVERYMEN          DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
-  HISTORIES            HISTORIES[]
-  ADDRESSES            ADDRESSES  @relation(fields: [id_address_fk], references: [idADDRESSES])
+  idDELIVERIES      Int         @id
+  timestamp         String
+  preparation_time  String
+  state             Int
+  id_users_fk       Int
+  id_stores_fk      Int
+  id_deliverymen_fk Int
+  id_address_fk     Int
+  USERS             USERS       @relation(fields: [id_users_fk], references: [idUSERS])
+  STORES            STORES      @relation(fields: [id_stores_fk], references: [idStores])
+  DELIVERYMEN       DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
+  HISTORIES         HISTORIES[]
+  ADDRESSES         ADDRESSES   @relation(fields: [id_address_fk], references: [idADDRESSES])
 }
 
 model HISTORIES {

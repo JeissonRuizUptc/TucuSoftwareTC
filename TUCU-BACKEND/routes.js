@@ -1,5 +1,4 @@
 // routes.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
@@ -18,9 +17,222 @@ router.use(cors({
     origin: '*'
 }));
 
-//Endpoints direcciones 
-//Endpoints usuarios
- //Crear nuevo usuario
+/**
+ * Endpoints ubicaciones
+ */
+// Endpoint para crear un nuevo país
+router.post('/NewCountry', async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'El nombre del país es obligatorio.' });
+    }
+
+    const newCountry = await prisma.COUNTRIES.create({
+      data: {
+        name,
+      },
+    });
+
+    res.status(201).json({ message: 'País creado exitosamente', country: newCountry });
+  } catch (error) {
+    console.error('Error al crear el país:', error);
+    res.status(500).json({ error: 'Se produjo un error al crear el país.' });
+  }
+});
+
+// Endpoint para obtener todos los países
+router.get('/GetCountries', async (req, res) => {
+  try {
+    const countries = await prisma.COUNTRIES.findMany();
+    res.status(200).json(countries);
+  } catch (error) {
+    console.error('Error al obtener países:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener los países.' });
+  }
+});
+
+// Endpoint para crear una nueva provincia
+router.post('/NewProvinces', async (req, res) => {
+  try {
+    const { name, id_country } = req.body;
+
+    if (!name || !id_country) {
+      return res.status(400).json({ error: 'El nombre de la provincia y el ID del país son obligatorios.' });
+    }
+
+    const newProvince = await prisma.PROVINCE.create({
+      data: {
+        name,
+        id_country,
+      },
+    });
+
+    res.status(201).json({ message: 'Provincia creada exitosamente', province: newProvince });
+  } catch (error) {
+    console.error('Error al crear la provincia:', error);
+    res.status(500).json({ error: 'Se produjo un error al crear la provincia.' });
+  }
+});
+
+// Endpoint para obtener todas las provincias
+router.get('/GetProvinces', async (req, res) => {
+  try {
+    const provinces = await prisma.PROVINCE.findMany();
+    res.status(200).json(provinces);
+  } catch (error) {
+    console.error('Error al obtener provincias:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener las provincias.' });
+  }
+});
+
+// Endpoint para crear una nueva ciudad
+router.post('/NewCities', async (req, res) => {
+  try {
+    const { name, id_province } = req.body;
+
+    if (!name || !id_province) {
+      return res.status(400).json({ error: 'El nombre de la ciudad y el ID de la provincia son obligatorios.' });
+    }
+
+    const newCity = await prisma.CITY.create({
+      data: {
+        name,
+        id_province,
+      },
+    });
+
+    res.status(201).json({ message: 'Ciudad creada exitosamente', city: newCity });
+  } catch (error) {
+    console.error('Error al crear la ciudad:', error);
+    res.status(500).json({ error: 'Se produjo un error al crear la ciudad.' });
+  }
+});
+
+// Endpoint para obtener todas las ciudades
+router.get('/GetCities', async (req, res) => {
+  try {
+    const cities = await prisma.CITY.findMany();
+    res.status(200).json(cities);
+  } catch (error) {
+    console.error('Error al obtener ciudades:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener las ciudades.' });
+  }
+});
+
+//Endponit para crear una dirección
+router.post('/NewAddresses', async (req, res) => {
+  try {
+    const { street, cityId } = req.body;
+
+    if (!street || !cityId) {
+      return res.status(400).json({ error: 'La calle y la ciudad son campos obligatorios.' });
+    }
+
+    const newAddress = await prisma.ADDRESSES.create({
+      data: {
+        street,
+        cityId,
+      },
+    });
+
+    res.status(201).json({ message: 'Dirección creada exitosamente', address: newAddress });
+  } catch (error) {
+    console.error('Error al crear la dirección:', error);
+    res.status(500).json({ error: 'Se produjo un error al crear la dirección.' });
+  }
+});
+
+//Endpoint para obtener todas las direcciones
+router.get('/GetAddresses', async (req, res) => {
+  try {
+    const addresses = await prisma.ADDRESSES.findMany();
+    res.status(200).json(addresses);
+  } catch (error) {
+    console.error('Error al obtener direcciones:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener las direcciones.' });
+  }
+});
+
+// Endpoint para obtener una dirección por su ID
+router.get('/addresses/:id', async (req, res) => {
+  try {
+    const addressId = parseInt(req.params.id); // Obtiene el ID de la dirección de los parámetros de la URL
+
+    if (isNaN(addressId) || addressId <= 0) {
+      return res.status(400).json({ error: 'ID de dirección no válido.' });
+    }
+
+    const address = await prisma.ADDRESSES.findUnique({
+      where: {
+        idADDRESSES: addressId, // Busca la dirección por su ID
+      },
+    });
+
+    if (!address) {
+      return res.status(404).json({ error: 'Dirección no encontrada.' });
+    }
+
+    res.status(200).json(address);
+  } catch (error) {
+    console.error('Error al obtener la dirección:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener la dirección.' });
+  }
+});
+
+
+ /**MODIFICARRRRR
+  * Endpoint nueva tienda
+  */
+ router.post('/newStore', async (req, res) => {
+  try {
+      const { name, nit, address, telephone_number, id_place_fk } = req.body;
+
+      // Validación de datos
+      if (!name || !nit || !address || !telephone_number || !id_place_fk) {
+          return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+      }
+
+      // Validación de longitud del campo nit
+     // if (nit.length !== 9) {
+      //    return res.status(400).json({ error: 'El campo nit debe tener una longitud de 9 caracteres.' });
+      //}
+
+      // Validación de formato de número de teléfono por país
+      const phoneNumberRegex = getPhoneNumberRegexForCountry(telephone_number);
+
+      if (!phoneNumberRegex.test(telephone_number)) {
+          return res.status(400).json({ error: 'Formato de número de teléfono inválido para el país seleccionado.' });
+      }
+
+      const newStore = await prisma.STORES.create({
+          data: {
+              name,
+              nit,
+              address,
+              telephone_number,
+              id_place_fk,
+          },
+      });
+
+      console.log(newStore);
+
+      // Devuelve una respuesta exitosa con la nueva tienda creada
+      res.status(201).json({ message: 'Tienda creada exitosamente', store: newStore });
+  } catch (error) {
+      console.error('Error al crear la tienda:', error);
+
+      // Devuelve una respuesta de error
+      res.status(500).json({ error: 'Se produjo un error al crear la tienda.' });
+  }
+});
+
+
+
+/**
+ * Endpoints nuevo usuarios
+ */
  router.post('/newUser', async (req, res) => {
   try {
       const { idUSERS, username, firstname, password, surname, enabled, email, id_stores_fk, id_roles_fk } = req.body;
@@ -63,7 +275,11 @@ router.use(cors({
       res.status(500).json({ error: 'Se produjo un error al crear el usuario.' });
   }
 });
-//login realizado el sabado por Farid xd 
+
+
+/**
+ * Endpoint login
+ */
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -106,112 +322,11 @@ router.post('/login', async (req, res) => {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
 // Endpoints a modificar
 
 
-// Crear un nuevo lugar
-router.post('/newPlace', async (req, res) => {
-    try {
-      const { city, province, country } = req.body;
-  
-      // Validación de datos (puedes agregar más validaciones según tus necesidades)
-      if (!city || !province || !country) {
-        return res.status(400).json({ error: 'Los campos city, province y country son obligatorios.' });
-      }
-  
-      const newPlace = await prisma.PLACES.create({
-        data: {
-          city,
-          province,
-          country,
-        },
-      });
-  
-      // Respondemos con el lugar recién creado
-      res.status(201).json(newPlace);
-    } catch (error) {
-      console.error('Error al crear el lugar:', error);
-      res.status(500).json({ error: 'Se produjo un error al crear el lugar.' });
-    }
-  });
-
-  //Obtener lugar por Id
-  router.get('/getPlace/:id', async (req, res) => {
-    try {
-        const placeId = parseInt(req.params.id, 10); // Convertir el parámetro a entero
-
-        // Validar si el ID es válido
-        if (isNaN(placeId)) {
-            return res.status(400).json({ error: 'El ID proporcionado no es válido.' });
-        }
-
-        const place = await prisma.PLACES.findUnique({
-            where: {
-                idPLACES: placeId, // Cambiar a idPLACES según tu modelo de datos
-            },
-        });
-
-        if (!place) {
-            return res.status(404).json({ error: 'Lugar no encontrado.' });
-        }
-
-        res.status(200).json(place);
-    } catch (error) {
-        console.error('Error al obtener el lugar:', error);
-        res.status(500).json({ error: 'Se produjo un error al obtener el lugar.' });
-    }
-});
-
- // INSERTAR NUEVA TIENDA
- router.post('/newStore', async (req, res) => {
-    try {
-        const { name, nit, address, telephone_number, id_place_fk } = req.body;
-
-        // Validación de datos
-        if (!name || !nit || !address || !telephone_number || !id_place_fk) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
-        }
-
-        // Validación de longitud del campo nit
-       // if (nit.length !== 9) {
-        //    return res.status(400).json({ error: 'El campo nit debe tener una longitud de 9 caracteres.' });
-        //}
-
-        // Validación de formato de número de teléfono por país
-        const phoneNumberRegex = getPhoneNumberRegexForCountry(telephone_number);
-
-        if (!phoneNumberRegex.test(telephone_number)) {
-            return res.status(400).json({ error: 'Formato de número de teléfono inválido para el país seleccionado.' });
-        }
-
-        const newStore = await prisma.STORES.create({
-            data: {
-                name,
-                nit,
-                address,
-                telephone_number,
-                id_place_fk,
-            },
-        });
-
-        console.log(newStore);
-
-        // Devuelve una respuesta exitosa con la nueva tienda creada
-        res.status(201).json({ message: 'Tienda creada exitosamente', store: newStore });
-    } catch (error) {
-        console.error('Error al crear la tienda:', error);
-
-        // Devuelve una respuesta de error
-        res.status(500).json({ error: 'Se produjo un error al crear la tienda.' });
-    }
-});
-
-// Crear un nuevo lugar
+/* Crear un nuevo rol
+*/
 router.post('/newRol', async (req, res) => {
     try {
       const { idROLES , roleName, description_role } = req.body;
@@ -228,8 +343,6 @@ router.post('/newRol', async (req, res) => {
             description_role 
         },
       });
-  
-      // Respondemos con el lugar recién creado
       res.status(201).json(newRole);
     } catch (error) {
       console.error('Error al crear el Rol:', error);
@@ -238,7 +351,6 @@ router.post('/newRol', async (req, res) => {
   });
 
  
-
 
 
   app.get('/getDomiciliarioLocation/:domiciliarioId', (req, res) => {
