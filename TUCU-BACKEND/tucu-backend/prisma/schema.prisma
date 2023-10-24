@@ -31,9 +31,9 @@ model STORES {
   idStores         Int          @id @default(autoincrement())
   name             String
   nit              Int
-  address          String
   telephone_number String
   id_place_fk      Int
+  addresses        ADDRESSES[]  // Eliminé la anotación de relación
   PLACES           PLACES       @relation(fields: [id_place_fk], references: [idPLACES])
   USERS            USERS[]
   DELIVERIES       DELIVERIES[]
@@ -65,7 +65,7 @@ model DELIVERYMEN {
   soat                            String
   tm_and_g_inspection_certificate Boolean
   timestamp                       DateTime
-  address                         String
+  addresses                       ADDRESSES[]  // Eliminé la anotación de relación
   id_placess_fk                   Int
   PLACES                          PLACES       @relation(fields: [id_placess_fk], references: [idPLACES])
   DELIVERIES                      DELIVERIES[]
@@ -73,19 +73,17 @@ model DELIVERYMEN {
 
 model DELIVERIES {
   idDELIVERIES       Int         @id
-  destination_addres String
   timestamp          String
   preparation_time   String
   state              Int
   id_users_fk        Int
   id_stores_fk       Int
   id_deliverymen_fk  Int
+  addresses          ADDRESSES[]  // Eliminé la anotación de relación
   USERS              USERS       @relation(fields: [id_users_fk], references: [idUSERS])
   STORES             STORES      @relation(fields: [id_stores_fk], references: [idStores])
   DELIVERYMEN        DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
   HISTORIES          HISTORIES[]
-
-
 }
 
 model HISTORIES {
@@ -95,3 +93,36 @@ model HISTORIES {
   id_delivey_fk Int
   DELIVERIES    DELIVERIES @relation(fields: [id_delivey_fk], references: [idDELIVERIES])
 }
+
+model COUNTRIES {
+  idCOUNTRIES Int    @id @default(autoincrement())
+  name        String
+  states      STATES[]
+}
+
+model STATES {
+  idSTATES    Int       @id @default(autoincrement())
+  name        String
+  id_country  Int
+  COUNTRIES   COUNTRIES  @relation(fields: [id_country], references: [idCOUNTRIES])
+  cities      CITIES[]
+}
+
+model CITIES {
+  idCITIES    Int       @id @default(autoincrement())
+  name        String
+  id_state    Int
+  STATES      STATES    @relation(fields: [id_state], references: [idSTATES])
+  addresses   ADDRESSES[]
+}
+
+model ADDRESSES {
+  idADDRESSES Int      @id @default(autoincrement())
+  street      String
+  city        CITIES   @relation(fields: [cityId], references: [idCITIES])
+  cityId      Int
+  stores      STORES[]  // Eliminé la anotación de relación
+  deliverymen DELIVERYMEN[] // Eliminé la anotación de relación
+  deliveries  DELIVERIES[]  // Eliminé la anotación de relación
+}
+
