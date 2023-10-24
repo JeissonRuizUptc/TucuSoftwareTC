@@ -10,14 +10,61 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model PLACES {
-  idPLACES Int    @id @default(autoincrement())
-  city     String
-  province String
-  country  String
+model COUNTRIES {
+  idCOUNTRIES Int        @id @default(autoincrement())
+  name        String
+  provinces   PROVINCE[]
+}
 
-  STORES      STORES[]
-  DELIVERYMEN DELIVERYMEN[]
+model PROVINCE {
+  idPROVINCE Int       @id @default(autoincrement())
+  name       String
+  id_country Int
+  COUNTRIES  COUNTRIES @relation(fields: [id_country], references: [idCOUNTRIES])
+  cities     CITY[]
+}
+
+model CITY {
+  idCITY      Int         @id @default(autoincrement())
+  name        String
+  id_province Int
+  PROVINCE    PROVINCE    @relation(fields: [id_province], references: [idPROVINCE])
+  addresses   ADDRESSES[]
+}
+
+model ADDRESSES {
+  idADDRESSES Int           @id @default(autoincrement())
+  street      String
+  cityId      Int
+  city        CITY          @relation(fields: [cityId], references: [idCITY])
+  stores      STORES[]
+  deliverymen DELIVERYMEN[]
+  deliveries  DELIVERIES[]
+}
+
+model DELIVERYMEN {
+  idDELIVERYMEN                   Int          @id
+  surname                         String
+  enabled                         Int
+  email                           String
+  drivers_license                 Boolean
+  soat                            String
+  tm_and_g_inspection_certificate Boolean
+  timestamp                       DateTime
+  id_address_men_fk               Int
+  addresses                       ADDRESSES    @relation(fields: [id_address_men_fk], references: [idADDRESSES])
+  DELIVERIES                      DELIVERIES[]
+}
+
+model STORES {
+  idStores            Int          @id @default(autoincrement())
+  name                String
+  nit                 Int
+  telephone_number    String
+  id_address_fk_store Int
+  addresses           ADDRESSES    @relation(fields: [id_address_fk_store], references: [idADDRESSES])
+  USERS               USERS[]
+  DELIVERIES          DELIVERIES[]
 }
 
 model ROLES {
@@ -25,18 +72,6 @@ model ROLES {
   roleName         Int
   description_role String?
   USERS            USERS[]
-}
-
-model STORES {
-  idStores         Int          @id @default(autoincrement())
-  name             String
-  nit              Int
-  telephone_number String
-  id_place_fk      Int
-  addresses        ADDRESSES[] // Eliminé la anotación de relación
-  PLACES           PLACES       @relation(fields: [id_place_fk], references: [idPLACES])
-  USERS            USERS[]
-  DELIVERIES       DELIVERIES[]
 }
 
 model USERS {
@@ -57,34 +92,20 @@ model USERS {
   @@map("users")
 }
 
-model DELIVERYMEN {
-  idDELIVERYMEN                   Int          @id
-  surname                         String
-  enabled                         Int
-  email                           String
-  drivers_license                 Boolean
-  soat                            String
-  tm_and_g_inspection_certificate Boolean
-  timestamp                       DateTime
-  addresses                       ADDRESSES[] // Eliminé la anotación de relación
-  id_placess_fk                   Int
-  PLACES                          PLACES       @relation(fields: [id_placess_fk], references: [idPLACES])
-  DELIVERIES                      DELIVERIES[]
-}
-
 model DELIVERIES {
-  idDELIVERIES      Int         @id
-  timestamp         String
-  preparation_time  String
-  state             Int
-  id_users_fk       Int
-  id_stores_fk      Int
-  id_deliverymen_fk Int
-  addresses         ADDRESSES[] // Eliminé la anotación de relación
-  USERS             USERS       @relation(fields: [id_users_fk], references: [idUSERS])
-  STORES            STORES      @relation(fields: [id_stores_fk], references: [idStores])
-  DELIVERYMEN       DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
-  HISTORIES         HISTORIES[]
+  idDELIVERIES         Int         @id
+  timestamp            String
+  preparation_time     String
+  state                Int
+  id_users_fk          Int
+  id_stores_fk         Int
+  id_deliverymen_fk    Int
+  id_address_fk        Int
+  USERS                USERS       @relation(fields: [id_users_fk], references: [idUSERS])
+  STORES               STORES      @relation(fields: [id_stores_fk], references: [idStores])
+  DELIVERYMEN          DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
+  HISTORIES            HISTORIES[]
+  ADDRESSES            ADDRESSES  @relation(fields: [id_address_fk], references: [idADDRESSES])
 }
 
 model HISTORIES {
@@ -93,36 +114,4 @@ model HISTORIES {
   modified_at   String
   id_delivey_fk Int
   DELIVERIES    DELIVERIES @relation(fields: [id_delivey_fk], references: [idDELIVERIES])
-}
-
-model COUNTRIES {
-  idCOUNTRIES Int      @id @default(autoincrement())
-  name        String
-  states      STATES[]
-}
-
-model STATES {
-  idSTATES   Int       @id @default(autoincrement())
-  name       String
-  id_country Int
-  COUNTRIES  COUNTRIES @relation(fields: [id_country], references: [idCOUNTRIES])
-  cities     CITIES[]
-}
-
-model CITIES {
-  idCITIES  Int         @id @default(autoincrement())
-  name      String
-  id_state  Int
-  STATES    STATES      @relation(fields: [id_state], references: [idSTATES])
-  addresses ADDRESSES[]
-}
-
-model ADDRESSES {
-  idADDRESSES Int           @id @default(autoincrement())
-  street      String
-  city        CITIES        @relation(fields: [cityId], references: [idCITIES])
-  cityId      Int
-  stores      STORES[] // Eliminé la anotación de relación
-  deliverymen DELIVERYMEN[] // Eliminé la anotación de relación
-  deliveries  DELIVERIES[] // Eliminé la anotación de relación
 }
