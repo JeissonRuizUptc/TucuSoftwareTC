@@ -181,50 +181,105 @@ router.get('/addresses/:id', async (req, res) => {
   }
 });
 
-
- /**MODIFICARRRRR
-  * Endpoint nueva tienda
-  */
- router.post('/newStore', async (req, res) => {
+/**
+ * Endpoint nueva tienda
+ */
+router.post('/newStore', async (req, res) => {
   try {
-      const { name, nit, address, telephone_number, id_place_fk } = req.body;
+    const { name, nit, telephone_number, id_address_fk_store } = req.body;
 
-      // Validación de datos
-      if (!name || !nit || !address || !telephone_number || !id_place_fk) {
-          return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
-      }
+    // Validación de datos
+    if (!name || !nit || !telephone_number || !id_address_fk_store) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
 
-      // Validación de longitud del campo nit
-     // if (nit.length !== 9) {
-      //    return res.status(400).json({ error: 'El campo nit debe tener una longitud de 9 caracteres.' });
-      //}
+    // Convierte el número de nit en una cadena de texto
+    const nitAsString = nit.toString();
 
-      // Validación de formato de número de teléfono por país
-      const phoneNumberRegex = getPhoneNumberRegexForCountry(telephone_number);
+    // Validación de longitud del campo nit (debe tener 9 caracteres)
+    if (nitAsString.length !== 9) {
+      return res.status(400).json({ error: 'El campo nit debe tener una longitud de 9 caracteres.' });
+    }
 
-      if (!phoneNumberRegex.test(telephone_number)) {
-          return res.status(400).json({ error: 'Formato de número de teléfono inválido para el país seleccionado.' });
-      }
+    // Validación de formato de número de teléfono por país
+    const phoneValidationResult = validatePhoneNumber(telephone_number);
 
-      const newStore = await prisma.STORES.create({
-          data: {
-              name,
-              nit,
-              address,
-              telephone_number,
-              id_place_fk,
-          },
-      });
+    if (phoneValidationResult === 'Invalid') {
+      return res.status(400).json({ error: 'Formato de número de teléfono inválido para el país seleccionado.' });
+    }
 
-      console.log(newStore);
+    const newStore = await prisma.STORES.create({
+      data: {
+        name,
+        nit,
+        telephone_number,
+        id_address_fk_store,
+      },
+    });
 
-      // Devuelve una respuesta exitosa con la nueva tienda creada
-      res.status(201).json({ message: 'Tienda creada exitosamente', store: newStore });
+    console.log(newStore);
+
+    // Devuelve una respuesta exitosa con la nueva tienda creada
+    res.status(201).json({ message: 'Tienda creada exitosamente', store: newStore });
   } catch (error) {
-      console.error('Error al crear la tienda:', error);
+    console.error('Error al crear la tienda:', error);
 
-      // Devuelve una respuesta de error
-      res.status(500).json({ error: 'Se produjo un error al crear la tienda.' });
+    // Devuelve una respuesta de error
+    res.status(500).json({ error: 'Se produjo un error al crear la tienda.' });
+  }
+});
+
+/**
+ * Endpoint para obtener una tienda por ID
+ */
+router.get('/store/:id', async (req, res) => {
+  try {
+    const storeId = parseInt(req.params.id);
+
+    if (isNaN(storeId) || storeId <= 0) {
+      return res.status(400).json({ error: 'ID de tienda no válido.' });
+    }
+
+    const store = await prisma.STORES.findUnique({
+      where: {
+        idStores: storeId,
+      },
+    });
+
+    if (!store) {
+      return res.status(404).json({ error: 'Tienda no encontrada.' });
+    }
+
+    res.status(200).json(store);
+  } catch (error) {
+    console.error('Error al obtener la tienda:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener la tienda.' });
+  }
+});
+
+
+/* Crear un nuevo rol */
+router.post('/newRol', async (req, res) => {
+  try {
+    const { idROLES, roleName, description_role } = req.body;
+
+    // Validación de datos (puedes agregar más validaciones según tus necesidades)
+    if (!idROLES || !roleName) {
+      return res.status(400).json({ error: 'Los campos idROLES y roleName son obligatorios y roleName debe ser un número entero.' });
+    }
+
+    const newRole = await prisma.ROLES.create({
+      data: {
+        idROLES,
+        roleName,
+        description_role,
+      },
+    });
+
+    res.status(201).json(newRole);
+  } catch (error) {
+    console.error('Error al crear el Rol:', error);
+    res.status(500).json({ error: 'Se produjo un error al crear el Rol.' });
   }
 });
 
@@ -321,36 +376,7 @@ router.post('/login', async (req, res) => {
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-// Endpoints a modificar
 
-
-/* Crear un nuevo rol
-*/
-router.post('/newRol', async (req, res) => {
-    try {
-      const { idROLES , roleName, description_role } = req.body;
-  
-      // Validación de datos (puedes agregar más validaciones según tus necesidades)
-      if (!idROLES || !roleName ) {
-        return res.status(400).json({ error: 'Los campos idROLES y roleName son obligatorios.' });
-      }
-  
-      const newRole = await prisma.ROLES.create({
-        data: {
-            idROLES,
-            roleName, 
-            description_role 
-        },
-      });
-      res.status(201).json(newRole);
-    } catch (error) {
-      console.error('Error al crear el Rol:', error);
-      res.status(500).json({ error: 'Se produjo un error al crear el Rol.' });
-    }
-  });
-
- 
 
 
   app.get('/getDomiciliarioLocation/:domiciliarioId', (req, res) => {
@@ -483,7 +509,9 @@ const newPedido = await prisma.DELIVERIES.create({
     }
   }
   
-  function getPhoneNumberRegexForCountry(phoneNumber) {
+  /**Funcion para validar el telefono
+   */
+  function validatePhoneNumber(phoneNumber) {
     if (/^\+57[0-9]{10}$/.test(phoneNumber)) {
         return 'CO';  // Colombia
     } else if (/^\+52[0-9]{10}$/.test(phoneNumber)) {
@@ -493,10 +521,7 @@ const newPedido = await prisma.DELIVERIES.create({
     } else {
         return 'Invalid';  // Número no válido para ninguno de los países
     }
-
-
-    // Expresión regular general por defecto
-    return /^\+[0-9]{1,3}-?[0-9]{1,14}$/;
 }
+
 
     module.exports = router
