@@ -93,8 +93,8 @@ model USERS {
 }
 
 model DELIVERIES {
-  idDELIVERIES      Int         @id
-  timestamp         DateTime    @default(now())
+  idDELIVERIES      Int         @id @default(autoincrement())
+  timestamp         DateTime    
   preparation_time  Int
   state             Int
   id_users_fk       Int
@@ -104,14 +104,6 @@ model DELIVERIES {
   USERS             USERS       @relation(fields: [id_users_fk], references: [idUSERS])
   STORES            STORES      @relation(fields: [id_stores_fk], references: [idStores])
   DELIVERYMEN       DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
-  HISTORIES         HISTORIES[]
   ADDRESSES         ADDRESSES   @relation(fields: [id_address_fk], references: [idADDRESSES])
 }
 
-model HISTORIES {
-  idHISTORIES   Int        @id @default(autoincrement())
-  action        String
-  modified_at   String
-  id_delivey_fk Int
-  DELIVERIES    DELIVERIES @relation(fields: [id_delivey_fk], references: [idDELIVERIES])
-}

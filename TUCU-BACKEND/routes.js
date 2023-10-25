@@ -184,33 +184,37 @@ router.get('/addresses/:id', async (req, res) => {
 //crear pedido
 router.post('/createDelivery', async (req, res) => {
   const {
-      timestamp,
+      
       preparation_time,
       state,
       id_users_fk,
       id_stores_fk,
       id_deliverymen_fk,
       id_address_fk
+      
   } = req.body;
-
+  
   try {
       const newDelivery = await prisma.dELIVERIES.create({
           data: {
-              timestamp,
+              timestamp: new Date(),
               preparation_time,
               state,
               id_users_fk,
               id_stores_fk,
               id_deliverymen_fk,
               id_address_fk
+              
           }
       });
 
       res.status(201).json(newDelivery);
   } catch (error) {
-      res.status(500).json({ error: "Error al crear el delivery" });
+      console.error("Error al crear el delivery:", error);
+      res.status(500).json({ error: "Error interno del servidor al crear el delivery" });
   }
 });
+
 
 /**
  * Endpoint nueva tienda
