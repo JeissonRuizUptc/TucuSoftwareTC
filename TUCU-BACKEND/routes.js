@@ -180,6 +180,7 @@ router.get('/addresses/:id', async (req, res) => {
     res.status(500).json({ error: 'Se produjo un error al obtener la dirección.' });
   }
 });
+
 //crear pedido
 router.post('/createDelivery', async (req, res) => {
   const {
@@ -312,8 +313,6 @@ router.post('/newRol', async (req, res) => {
     res.status(500).json({ error: 'Se produjo un error al crear el Rol.' });
   }
 });
-
-
 
 /**
  * Endpoints nuevo usuarios

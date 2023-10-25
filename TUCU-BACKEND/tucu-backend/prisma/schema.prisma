@@ -50,7 +50,7 @@ model DELIVERYMEN {
   drivers_license                 Boolean
   soat                            String
   tm_and_g_inspection_certificate Boolean
-  timestamp                       DateTime
+  timestamp                       DateTime     @default(now())
   id_address_men_fk               Int
   addresses                       ADDRESSES    @relation(fields: [id_address_men_fk], references: [idADDRESSES])
   DELIVERIES                      DELIVERIES[]
@@ -69,7 +69,7 @@ model STORES {
 
 model ROLES {
   idROLES          Int     @id
-  roleName         Int
+  roleName         String
   description_role String?
   USERS            USERS[]
 }
