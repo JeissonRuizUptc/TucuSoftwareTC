@@ -410,6 +410,29 @@ router.get('/traerDeliverymen', async (req, res) => {
       res.status(500).json({ error: "Error al obtener los domiciliarios" });
   }
 });
+router.get('/manyDeliveries', async (req, res) => {
+  try {
+      const deliveries = await prisma.dELIVERIES.findMany();
+      res.json(deliveries);
+  } catch (error) {
+      res.status(500).json({ error: "Error al obtener los deliveries" });
+  }
+});
+
+// Endpoint para obtener deliveries por fecha
+router.get('/manyDeliveriesDate', async (req, res) => {
+  const date = req.params.date;
+  try {
+      const deliveriesByDate = await prisma.dELIVERIES.findMany({
+          where: {
+              timestamp: date
+          }
+      });
+      res.json(deliveriesByDate);
+  } catch (error) {
+      res.status(500).json({ error: "Error al obtener los deliveries por fecha" });
+  }
+});
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
