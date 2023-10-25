@@ -180,6 +180,36 @@ router.get('/addresses/:id', async (req, res) => {
     res.status(500).json({ error: 'Se produjo un error al obtener la dirección.' });
   }
 });
+//crear pedido
+app.post('/createDelivery', async (req, res) => {
+  const {
+      timestamp,
+      preparation_time,
+      state,
+      id_users_fk,
+      id_stores_fk,
+      id_deliverymen_fk,
+      id_address_fk
+  } = req.body;
+
+  try {
+      const newDelivery = await prisma.dELIVERIES.create({
+          data: {
+              timestamp,
+              preparation_time,
+              state,
+              id_users_fk,
+              id_stores_fk,
+              id_deliverymen_fk,
+              id_address_fk
+          }
+      });
+
+      res.status(201).json(newDelivery);
+  } catch (error) {
+      res.status(500).json({ error: "Error al crear el delivery" });
+  }
+});
 
 /**
  * Endpoint nueva tienda
@@ -372,36 +402,7 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Se produjo un error al iniciar sesión.' });
   }
 });
-//crear pedido
-app.post('/createDelivery', async (req, res) => {
-  const {
-      timestamp,
-      preparation_time,
-      state,
-      id_users_fk,
-      id_stores_fk,
-      id_deliverymen_fk,
-      id_address_fk
-  } = req.body;
 
-  try {
-      const newDelivery = await prisma.dELIVERIES.create({
-          data: {
-              timestamp,
-              preparation_time,
-              state,
-              id_users_fk,
-              id_stores_fk,
-              id_deliverymen_fk,
-              id_address_fk
-          }
-      });
-
-      res.status(201).json(newDelivery);
-  } catch (error) {
-      res.status(500).json({ error: "Error al crear el delivery" });
-  }
-});
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
