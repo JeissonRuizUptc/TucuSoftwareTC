@@ -48,7 +48,7 @@ model DELIVERYMEN {
   enabled                         Int
   email                           String
   drivers_license                 Boolean
-  soat                            String
+  soat                            Boolean
   tm_and_g_inspection_certificate Boolean
   timestamp                       DateTime     @default(now())
   id_address_men_fk               Int
