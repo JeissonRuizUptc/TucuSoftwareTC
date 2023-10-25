@@ -94,7 +94,7 @@ model USERS {
 
 model DELIVERIES {
   idDELIVERIES      Int         @id
-  timestamp         String
+  timestamp         DateTime    @default(now())
   preparation_time  Int
   state             Int
   id_users_fk       Int
