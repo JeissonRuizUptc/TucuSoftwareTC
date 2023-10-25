@@ -181,7 +181,7 @@ router.get('/addresses/:id', async (req, res) => {
   }
 });
 //crear pedido
-app.post('/createDelivery', async (req, res) => {
+router.post('/createDelivery', async (req, res) => {
   const {
       timestamp,
       preparation_time,
