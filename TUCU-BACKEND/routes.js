@@ -402,6 +402,15 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/traerDeliverymen', async (req, res) => {
+  try {
+      const deliverymen = await prisma.dELIVERYMEN.findMany();
+      res.json(deliverymen);
+  } catch (error) {
+      res.status(500).json({ error: "Error al obtener los domiciliarios" });
+  }
+});
+
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
