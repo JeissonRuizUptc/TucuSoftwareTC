@@ -95,7 +95,7 @@ model USERS {
 model DELIVERIES {
   idDELIVERIES      Int         @id
   timestamp         String
-  preparation_time  String
+  preparation_time  Int
   state             Int
   id_users_fk       Int
   id_stores_fk      Int
