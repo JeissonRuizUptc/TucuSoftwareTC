@@ -45,10 +45,16 @@
     /* 0% */
 }
 
+.dashboardHeaderSection{
+    display: flex;
+    width: 80%;
+    height: 100vh;
+    flex-direction: column;
+}
+
 .dashboardHeader {
     display: flex;
     background-color: #1B9C85;
-    width: 80%;
     height: 10vh;
     flex-direction: row;
     align-items: center;

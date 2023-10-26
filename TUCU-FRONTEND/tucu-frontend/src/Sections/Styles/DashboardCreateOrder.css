@@ -1,0 +1,63 @@
+.DashboardCreateOrder-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.DashboardCreateOrder-container h1 {
+    color: #000;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 105% */
+}
+
+.DashboardCreateOrder-container h1 {
+    color: #000;
+    font-family: Poppins;
+    font-size: 20px;
+    margin-bottom: 2rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 105% */
+}
+
+.DashboardCreateOrder-form label {
+    color: #000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 131.25% */
+}
+
+.DashboardCreateOrder-form  {
+    margin: 2rem 0;
+}
+
+.DashboardCreateOrder-form input {}
+
+
+.DashboardCreateOrder-footer p {
+    color: #000;
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.DashboardCreateOrder-footer button {
+    width: 404px;
+    margin-top: 2rem;
+    height: 51.131px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #4C4C6D;
+}
