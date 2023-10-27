@@ -10,38 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model COUNTRIES {
-  idCOUNTRIES Int        @id @default(autoincrement())
-  name        String
-  provinces   PROVINCE[]
-}
-
-model PROVINCE {
-  idPROVINCE Int       @id @default(autoincrement())
-  name       String
-  id_country Int
-  COUNTRIES  COUNTRIES @relation(fields: [id_country], references: [idCOUNTRIES])
-  cities     CITY[]
-}
-
-model CITY {
-  idCITY      Int         @id @default(autoincrement())
-  name        String
-  id_province Int
-  PROVINCE    PROVINCE    @relation(fields: [id_province], references: [idPROVINCE])
-  addresses   ADDRESSES[]
-}
-
-model ADDRESSES {
-  idADDRESSES Int           @id @default(autoincrement())
-  street      String
-  cityId      Int
-  city        CITY          @relation(fields: [cityId], references: [idCITY])
-  stores      STORES[]
-  deliverymen DELIVERYMEN[]
-  deliveries  DELIVERIES[]
-}
-
 model DELIVERYMEN {
   idDELIVERYMEN                   Int          @id
   surname                         String
@@ -51,20 +19,18 @@ model DELIVERYMEN {
   soat                            Boolean
   tm_and_g_inspection_certificate Boolean
   timestamp                       DateTime     @default(now())
-  id_address_men_fk               Int
-  addresses                       ADDRESSES    @relation(fields: [id_address_men_fk], references: [idADDRESSES])
+  address                         String       @default("")
   DELIVERIES                      DELIVERIES[]
 }
 
 model STORES {
-  idStores            Int          @id @default(autoincrement())
-  name                String
-  nit                 Int
-  telephone_number    String
-  id_address_fk_store Int
-  addresses           ADDRESSES    @relation(fields: [id_address_fk_store], references: [idADDRESSES])
-  USERS               USERS[]
-  DELIVERIES          DELIVERIES[]
+  idStores         Int          @id @default(autoincrement())
+  name             String
+  nit              Int
+  telephone_number String
+  address          String       @default("")
+  USERS            USERS[]
+  DELIVERIES       DELIVERIES[]
 }
 
 model ROLES {
@@ -94,16 +60,14 @@ model USERS {
 
 model DELIVERIES {
   idDELIVERIES      Int         @id @default(autoincrement())
-  timestamp         DateTime    
+  timestamp         DateTime
   preparation_time  Int
   state             Int
   id_users_fk       Int
   id_stores_fk      Int
   id_deliverymen_fk Int
-  id_address_fk     Int
+  address           String      @default("")
   USERS             USERS       @relation(fields: [id_users_fk], references: [idUSERS])
   STORES            STORES      @relation(fields: [id_stores_fk], references: [idStores])
   DELIVERYMEN       DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
-  ADDRESSES         ADDRESSES   @relation(fields: [id_address_fk], references: [idADDRESSES])
 }
-
