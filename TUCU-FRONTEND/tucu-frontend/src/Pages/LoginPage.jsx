@@ -1,32 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import './Styles/LoginPage.css';
-import userData from '../db/Users.json';
 
-const LoginPage = () => {
-    const [username, setUsername] = useState(""); // Estado para el nombre de usuario
-    const [password, setPassword] = useState(""); // Estado para la contraseña
-    const [error, setError] = useState(""); // Estado para mensajes de error
-    const [showPassword, setShowPassword] = useState(false); // Estado para mostrar u ocultar la contraseña
-    const [usernameError, setUsernameError] = useState(""); // Estado para el mensaje de error del usuario
-    const [passwordError, setPasswordError] = useState(""); // Estado para el mensaje de error de la contraseña
+const LoginPage = ({ sesionIniciada, setSesionIniciada }) => {
+    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
 
-    // Función para manejar el envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validar que ambos campos estén completos
         if (!username || !password) {
             if (!username) setUsernameError("El campo de usuario es obligatorio.");
             if (!password) setPasswordError("El campo de contraseña es obligatorio.");
-            return; // Detener el envío del formulario si hay errores
+            return;
         }
 
-        // Realiza una llamada a la API para verificar las credenciales
-        try {
-            // Restablecer los errores de validación
-            setUsernameError("");
-            setPasswordError("");
+        setUsernameError("");
+        setPasswordError("");
 
+        try {
             const response = await fetch("http://localhost:3200/api/login", {
                 method: "POST",
                 headers: {
@@ -37,12 +34,15 @@ const LoginPage = () => {
 
             if (response.status === 200) {
                 const data = await response.json();
-                console.log(data);
                 if (data.message === "Inicio de sesión exitoso") {
-                    // Si las credenciales son válidas, puedes redirigir o realizar alguna acción deseada
                     setError("");
+                    setSesionIniciada(true);
+
+                    // Almacenar el estado de la sesión en el almacenamiento local
+                    localStorage.setItem("sesionIniciada", "true");
+                    navigate("/dashboard");
+
                 } else {
-                    // Si las credenciales no son válidas, muestra un mensaje de error
                     setError(data.message);
                 }
             } else if (response.status === 401) {
@@ -53,6 +53,8 @@ const LoginPage = () => {
             setError("Error de red");
         }
     };
+
+
 
     return (
         <div className="LoginContainer">
