@@ -20,14 +20,12 @@ router.use(cors({
 //crear pedido
 router.post('/createDelivery', async (req, res) => {
   const {
-      
       preparation_time,
       state,
       id_users_fk,
       id_stores_fk,
       id_deliverymen_fk,
-      id_address_fk
-      
+      address
   } = req.body;
   
   try {
@@ -39,8 +37,7 @@ router.post('/createDelivery', async (req, res) => {
               id_users_fk,
               id_stores_fk,
               id_deliverymen_fk,
-              id_address_fk
-              
+              address
           }
       });
 
@@ -52,15 +49,16 @@ router.post('/createDelivery', async (req, res) => {
 });
 
 
+
 /**
  * Endpoint nueva tienda
  */
 router.post('/newStore', async (req, res) => {
   try {
-    const { name, nit, telephone_number, id_address_fk_store } = req.body;
+    const { name, nit, telephone_number, address } = req.body;
 
     // Validación de datos
-    if (!name || !nit || !telephone_number || !id_address_fk_store) {
+    if (!name || !nit || !telephone_number || !address) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
     }
 
@@ -79,15 +77,14 @@ router.post('/newStore', async (req, res) => {
       return res.status(400).json({ error: 'Formato de número de teléfono inválido para el país seleccionado.' });
     }
 
-    const newStore = await prisma.STORES.create({
+    const newStore = await prisma.sTORES.create({
       data: {
         name,
-        nit,
+        nit: parseInt(nitAsString, 10), // Asegurándonos de que nit es un número
         telephone_number,
-        id_address_fk_store,
+        address,
       },
     });
-
     console.log(newStore);
 
     // Devuelve una respuesta exitosa con la nueva tienda creada
@@ -97,6 +94,49 @@ router.post('/newStore', async (req, res) => {
 
     // Devuelve una respuesta de error
     res.status(500).json({ error: 'Se produjo un error al crear la tienda.' });
+  }
+});
+//crear deliveryman
+router.post('/createDeliveryman', async (req, res) => {
+  try {
+    const {
+      idDELIVERYMEN,
+      surname,
+      enabled,
+      email,
+      drivers_license,
+      soat,
+      tm_and_g_inspection_certificate,
+      address
+    } = req.body;
+
+    // Validación de datos
+    if (!surname || enabled === undefined || !email || drivers_license === undefined || soat === undefined || tm_and_g_inspection_certificate === undefined) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
+
+    // Validación del email
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      return res.status(400).json({ error: 'Formato de email inválido.' });
+    }
+
+    const newDeliveryman = await prisma.dELIVERYMEN.create({
+      data: {
+        idDELIVERYMEN,
+        surname,
+        enabled,
+        email,
+        drivers_license,
+        soat,
+        tm_and_g_inspection_certificate,
+        address
+      }
+    });
+
+    res.status(201).json(newDeliveryman);
+  } catch (error) {
+    console.error("Error al crear el repartidor:", error);
+    res.status(500).json({ error: "Error interno del servidor al crear el repartidor" });
   }
 });
 
