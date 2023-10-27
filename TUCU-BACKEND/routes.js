@@ -274,6 +274,35 @@ router.get('/manyDeliveriesDate', async (req, res) => {
   }
 });
 
+router.get('/user/:userId/store', async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+
+    if (isNaN(userId) || userId <= 0) {
+      return res.status(400).json({ error: 'ID de usuario no válido.' });
+    }
+
+    const userWithStore = await prisma.USERS.findUnique({
+      where: {
+        idUSERS: userId,
+      },
+      include: {
+        STORES: true,
+      },
+    });
+
+    if (!userWithStore) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+
+    res.status(200).json(userWithStore.STORES);
+  } catch (error) {
+    console.error('Error al obtener la tienda asociada al usuario:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener la tienda asociada al usuario.' });
+  }
+});
+
+
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
