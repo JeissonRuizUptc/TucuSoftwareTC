@@ -240,6 +240,16 @@ router.post('/newRol', async (req, res) => {
   }
 });
 
+router.get('/deliverymen', async (req, res) => {
+  try {
+    const deliverymen = await prisma.DELIVERYMEN.findMany();
+    res.status(200).json(deliverymen);
+  } catch (error) {
+    console.error('Error al recuperar los repartidores:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 
 /**
  * Endpoint login
