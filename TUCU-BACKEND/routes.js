@@ -339,7 +339,7 @@ router.get('/deliveriesWithDeliverymen', async (req, res) => {
   }
 });
 
-router.get('/user/:userId/store', async (req, res) => {
+router.get('/user_store/:userId', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
 
@@ -347,7 +347,7 @@ router.get('/user/:userId/store', async (req, res) => {
       return res.status(400).json({ error: 'ID de usuario no válido.' });
     }
 
-    const userWithStore = await prisma.USERS.findUnique({
+    const userWithCompany = await prisma.USERS.findUnique({
       where: {
         idUSERS: userId,
       },
@@ -356,16 +356,17 @@ router.get('/user/:userId/store', async (req, res) => {
       },
     });
 
-    if (!userWithStore) {
+    if (!userWithCompany) {
       return res.status(404).json({ error: 'Usuario no encontrado.' });
     }
 
-    res.status(200).json(userWithStore.STORES);
+    res.status(200).json(userWithCompany);
   } catch (error) {
-    console.error('Error al obtener la tienda asociada al usuario:', error);
-    res.status(500).json({ error: 'Se produjo un error al obtener la tienda asociada al usuario.' });
-  }
+    console.error('Error al obtener la información del usuario y la empresa:', error);
+    res.status(500).json({ error: 'Se produjo un error al obtener la información del usuario y la empresa.' });
+  }
 });
+
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
