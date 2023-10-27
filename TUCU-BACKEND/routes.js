@@ -292,14 +292,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/traerDeliverymen', async (req, res) => {
-  try {
-      const deliverymen = await prisma.dELIVERYMEN.findMany();
-      res.json(deliverymen);
-  } catch (error) {
-      res.status(500).json({ error: "Error al obtener los domiciliarios" });
-  }
-});
+
 router.get('/manyDeliveries', async (req, res) => {
   try {
       const deliveries = await prisma.dELIVERIES.findMany();
@@ -323,6 +316,7 @@ router.get('/manyDeliveriesDate', async (req, res) => {
       res.status(500).json({ error: "Error al obtener los deliveries por fecha" });
   }
 });
+
 // join entre deliverys y delyverymen
 router.get('/deliveriesWithDeliverymen', async (req, res) => {
   try {
@@ -338,6 +332,7 @@ router.get('/deliveriesWithDeliverymen', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
 //actualizar estado del delivery #borrar xd
 router.put('/deliveries/:id', async (req, res) => {
   const { id } = req.params;
@@ -361,7 +356,7 @@ router.put('/deliveries/:id', async (req, res) => {
       res.status(500).send('Error al actualizar el estado de la entrega');
   }
 });
-
+//endpoint join entre user y store
 router.get('/user_store/:userId', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -393,8 +388,6 @@ router.get('/user_store/:userId', async (req, res) => {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-
-
   app.get('/getDomiciliarioLocation/:domiciliarioId', (req, res) => {
     // Obtener las coordenadas en tiempo real de acuerdo al domiciliarioId
     const domiciliarioId = req.params.domiciliarioId;
@@ -421,7 +414,6 @@ router.get('/user_store/:userId', async (req, res) => {
     }
   }
  
-
   
   // Actualizar la ubicacion del domiciliario
   function actualizarMapa(lat, lng) {
@@ -463,6 +455,4 @@ router.get('/user_store/:userId', async (req, res) => {
         return 'Invalid';  // Número no válido para ninguno de los países
     }
 }
-
-
     module.exports = router
