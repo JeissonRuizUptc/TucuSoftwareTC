@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom"; // Importa el hook useHistory
 import './Styles/Dashboard.css';
 import DashboardStart from "../Sections/DashboardStart";
@@ -15,6 +15,13 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
 
         navigate("/");
     };
+
+    const [selectedComponent, setSelectedComponent] = useState("DashboardCreateOrder");
+
+    const handleComponentChange = (componentName) => {
+        setSelectedComponent(componentName);
+    };
+
     console.log(sesionIniciada);
     if (!sesionIniciada) {
         // Si sesionIniciada es falso, redirige al usuario a la página de inicio
@@ -39,16 +46,24 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
                         </svg>
                     </button>
                 </div>
-                <div>
-                    <DashboardCreateOrder />
-                    <DashboardStart />
+                <div className="dashboardHeaderSection_container" >
+                {selectedComponent === "DashboardCreateOrder" ? (
+                        <DashboardCreateOrder />
+                    ) : (
+                        <DashboardStart />
+                    )}
                 </div>
             </div>
             <div className="dashboardNav">
                 <h1>Tucu</h1>
                 <div className="dashboardNav-items">
-                    <a href=""><p>Inicio</p></a>
-                    <a href=""><p>Crear Pedido</p></a>
+                    
+                    <a href="#" onClick={() => handleComponentChange("DashboardStart")}>
+                        <p>Inicio</p>
+                    </a>
+                    <a href="" onClick={() => handleComponentChange("DashboardCreateOrder")}>
+                        <p>Crear Pedido</p>
+                    </a>
                     <a href=""><p>Seguimiento</p></a>
                     <button
                         className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
