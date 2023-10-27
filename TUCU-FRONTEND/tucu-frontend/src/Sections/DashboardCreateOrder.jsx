@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import './Styles/DashboardCreateOrder.css';
 
-
-
 const DashboardCreateOrder = () => {
+    const addressInputRef = useRef(null);
+
+    useEffect(() => {
+        // Crea una instancia del servicio de autocompletado de Google Maps
+        const autocomplete = new window.google.maps.places.Autocomplete(addressInputRef.current);
+
+        // Configura las opciones de autocompletado (puedes personalizar según tus necesidades)
+        autocomplete.setTypes(['geocode']);
+
+        // Escucha el evento de selección de lugar y obtén los detalles del lugar
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            console.log(place); // Aquí puedes acceder a los detalles del lugar
+        });
+    }, []);
 
     return (
         <div className="DashboardCreateOrder-container">
@@ -38,11 +51,17 @@ const DashboardCreateOrder = () => {
                 </div>
 
                 <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block  tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+                    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label className="block tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
                             Dirección *
                         </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque" />
+                        <input
+                            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="grid-city"
+                            type="text"
+                            placeholder="Albuquerque"
+                            ref={addressInputRef} // Asigna la referencia al campo de dirección
+                        />
                     </div>
 
                     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
