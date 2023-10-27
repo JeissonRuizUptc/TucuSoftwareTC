@@ -313,7 +313,21 @@ router.get('/manyDeliveriesDate', async (req, res) => {
       res.status(500).json({ error: "Error al obtener los deliveries por fecha" });
   }
 });
+// join entre deliverys y delyverymen
+router.get('/deliveriesWithDeliverymen', async (req, res) => {
+  try {
+    const deliveries = await prisma.dELIVERIES.findMany({
+      include: {
+        DELIVERYMEN: true, // Aquí suponemos que tienes una relación entre las tablas en tu modelo Prisma
+      }
+    });
 
+    res.status(200).json(deliveries);
+  } catch (error) {
+    console.error('Error al recuperar los deliveries con los deliverymen:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
