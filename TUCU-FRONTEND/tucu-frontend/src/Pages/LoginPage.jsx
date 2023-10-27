@@ -40,6 +40,7 @@ const LoginPage = ({ sesionIniciada, setSesionIniciada }) => {
 
                     // Almacenar el estado de la sesión en el almacenamiento local
                     localStorage.setItem("sesionIniciada", "true");
+                    localStorage.setItem("token", data.token);
                     navigate("/dashboard");
 
                 } else {

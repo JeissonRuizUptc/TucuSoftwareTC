@@ -20,6 +20,8 @@ const RegisterPager = () => {
         });
     }, []);
 
+
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -50,34 +52,41 @@ const RegisterPager = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Crear un objeto para enviar a Endpoint 1
-        const endpoint1Data = {
-            idUSERS: parseInt(formData.nit),
-            username: formData.userName,
-            firstname: formData.firstName,
-            password: formData.password,
-            surname: formData.lastName,
-            enabled: 1,
-            email: formData.email,
-            id_stores_fk: 1,
-            id_roles_fk: 1
-        };
-
         // Crear un objeto para enviar a Endpoint 2
         const endpoint2Data = {
             name: formData.legalName,
             nit: parseInt(formData.nit),
-            address: formData.address,
             telephone_number: formData.contactNumber,
-            id_place_fk: 2
+            address: formData.address
         };
 
+
         try {
+
+
+            // Enviar la solicitud al Endpoint 2
+            const sendStore = await axios.post('http://localhost:3200/api/newStore', endpoint2Data);
+            const responseData = sendStore.data;
+            const idStores = responseData.idStores;
+
+
+            // Crear un objeto para enviar a Endpoint 1
+            const endpoint1Data = {
+                idUSERS: parseInt(formData.nit),
+                username: formData.userName,
+                firstname: formData.firstName,
+                password: formData.password,
+                surname: formData.lastName,
+                enabled: 1,
+                email: formData.email,
+                id_stores_fk: idStores,
+                id_roles_fk: 1
+            };
+
             // Enviar la solicitud al Endpoint 1
             await axios.post('http://localhost:3200/api/newUser', endpoint1Data);
 
-            // Enviar la solicitud al Endpoint 2
-            await axios.post('http://localhost:3200/api/newStore', endpoint2Data);
+
 
             // Limpiar el formulario después de un envío exitoso
             setFormData({
@@ -245,9 +254,9 @@ const RegisterPager = () => {
                                     name="nit"
                                     value={formData.nit}
                                     onChange={handleChange} />
-                                    {/* Mostrar mensaje de error */}
+                                {/* Mostrar mensaje de error */}
                                 {contactNumberError && <p className="text-red-500">{contactNumberError}</p>}
-                            </div>  
+                            </div>
                             <div className="w-full md:w-1/2 px-3">
                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                                     Numero de contacto *

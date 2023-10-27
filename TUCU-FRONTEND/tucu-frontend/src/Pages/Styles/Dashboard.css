@@ -35,6 +35,14 @@
 
 }
 
+.dashboardNav-items {
+    display:  flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
 .dashboardNav-items p {
     margin: 1.5rem 0;
     color: #FFF;
@@ -42,10 +50,18 @@
     font-size: 24px;
     font-style: normal;
     text-align: center;
-    /* 0% */
+
 }
 
-.dashboardHeaderSection{
+.dashboardNav-items button {
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.dashboardHeaderSection {
     display: flex;
     width: 80%;
     height: 100vh;
@@ -56,9 +72,10 @@
     display: flex;
     background-color: #1B9C85;
     height: 10vh;
+    width: 100%;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .dashboardHeader h1 {
@@ -71,7 +88,34 @@
     text-transform: capitalize;
 }
 
-.dashboardSection{
+
+
+.dashboardHeader p {
+    color: #E8F6EF;
+    font-family: Poppins;
+    font-size: 22px;
+    align-items: flex-end;
+    text-align: right;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 95.455% */
+}
+
+.dashboardHeader-dateUser__user{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-right: 3rem;
+}
+
+.dashboardHeader-dateUser__user p{
+    
+    padding-right: 3rem;
+}
+
+.dashboardSection {
     display: flex;
     width: 80%;
     height: vh;

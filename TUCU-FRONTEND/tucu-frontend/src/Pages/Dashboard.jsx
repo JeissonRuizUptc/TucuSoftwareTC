@@ -1,18 +1,51 @@
-import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom"; // Importa el hook useHistory
+import React, { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import './Styles/Dashboard.css';
 import DashboardStart from "../Sections/DashboardStart";
 import DashboardCreateOrder from "../Sections/DashboardCreateOrder";
 
 const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
-    const navigate = useNavigate(); // Obtiene la instancia de useHistory
+    const navigate = useNavigate();
+    const [token, setToken] = useState("");
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true); // Estado para controlar la carga del componente
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (sesionIniciada && storedToken) {
+            setToken(storedToken);
+
+            const parts = storedToken.split(".");
+            if (parts.length === 3) {
+                const payloadBase64 = parts[1];
+                const payloadDecoded = atob(payloadBase64);
+                const payloadJson = JSON.parse(payloadDecoded);
+
+                if (payloadJson.userId) {
+                    // Hacer una solicitud HTTP para obtener los datos del usuario y la tienda
+                    fetch(`http://localhost:3200/api/user_store/${payloadJson.userId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            setUserData(data);
+                            setLoading(false); // Marcar la carga como completa
+                        })
+                        .catch(error => {
+                            console.error("Error al obtener los datos del usuario:", error);
+                            setLoading(false); // Marcar la carga como completa, incluso si hay un error
+                        });
+                } else {
+                    setUserData(payloadJson);
+                    setLoading(false); // Marcar la carga como completa
+                }
+            }
+        } else {
+            navigate("/");
+        }
+    }, [sesionIniciada, navigate]);
+
     const handleLogout = () => {
-        // Cerrar sesión: Establecer la variable sesionIniciada en false
         setSesionIniciada(false);
-
-        // Borrar el estado de la sesión del almacenamiento local
-        localStorage.setItem("sesionIniciada", "false");
-
+        localStorage.removeItem("token");
         navigate("/");
     };
 
@@ -22,32 +55,40 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
         setSelectedComponent(componentName);
     };
 
-    console.log(sesionIniciada);
     if (!sesionIniciada) {
-        // Si sesionIniciada es falso, redirige al usuario a la página de inicio
         return <Navigate to="/" />;
     }
+
+    // Si la carga no ha finalizado, muestra un mensaje de carga o un componente de carga
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
 
 
     return (
         <div className="dashboardContainer">
             <div className="dashboardHeaderSection">
                 <div className="dashboardHeader">
-                    <div className="dashboardHeader-dateUser">
-                        <h1>commercial name</h1>
-                        <p>User name</p>
+                    <div><p></p></div>
+                    <div> <h1>{userData && userData.STORES ? userData.STORES.name : "Nombre Comercial"}</h1></div>
+                    <div className="dashboardHeader-dateUser__user">
+
+                        <p>{userData ? userData.firstname : "Nombre de Usuario"}</p>
+                        <button
+                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                            onClick={handleLogout} // Agrega el manejador de eventos para cerrar sesión
+                        >
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3" />
+                            </svg>
+                        </button>
                     </div>
-                    <button
-                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-                        onClick={handleLogout} // Agrega el manejador de eventos para cerrar sesión
-                    >
-                        <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-                        </svg>
-                    </button>
+
+
                 </div>
                 <div className="dashboardHeaderSection_container" >
-                {selectedComponent === "DashboardCreateOrder" ? (
+                    {selectedComponent === "DashboardCreateOrder" ? (
                         <DashboardCreateOrder />
                     ) : (
                         <DashboardStart />
@@ -57,7 +98,7 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
             <div className="dashboardNav">
                 <h1>Tucu</h1>
                 <div className="dashboardNav-items">
-                    
+
                     <a href="#" onClick={() => handleComponentChange("DashboardStart")}>
                         <p>Inicio</p>
                     </a>
