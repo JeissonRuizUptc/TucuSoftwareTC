@@ -338,6 +338,29 @@ router.get('/deliveriesWithDeliverymen', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+//actualizar estado del delivery #borrar xd
+router.put('/deliveries/:id', async (req, res) => {
+  const { id } = req.params;
+  const { state } = req.body;
+
+  if (!state) {
+      return res.status(400).send('El estado es requerido');
+  }
+
+  try {
+      const updatedDelivery = await prisma.dELIVERIES.update({
+          where: {
+              idDELIVERIES: Number(id)
+          },
+          data: {
+              state
+          }
+      });
+      res.json(updatedDelivery);
+  } catch (error) {
+      res.status(500).send('Error al actualizar el estado de la entrega');
+  }
+});
 
 router.get('/user/:userId/store', async (req, res) => {
   try {
