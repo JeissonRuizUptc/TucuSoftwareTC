@@ -21,6 +21,7 @@ model DELIVERYMEN {
   timestamp                       DateTime     @default(now())
   address                         String       @default("")
   DELIVERIES                      DELIVERIES[]
+  HISTORIES                       HISTORIES[]
 }
 
 model STORES {
@@ -31,6 +32,7 @@ model STORES {
   address          String       @default("")
   USERS            USERS[]
   DELIVERIES       DELIVERIES[]
+  HISTORIES        HISTORIES[]
 }
 
 model ROLES {
@@ -54,6 +56,7 @@ model USERS {
   STORES       STORES       @relation(fields: [id_stores_fk], references: [idStores])
   ROLES        ROLES        @relation(fields: [id_roles_fk], references: [idROLES])
   DELIVERIES   DELIVERIES[]
+  HISTORIES    HISTORIES[]
 
   @@map("users")
 }
@@ -70,4 +73,22 @@ model DELIVERIES {
   USERS             USERS       @relation(fields: [id_users_fk], references: [idUSERS])
   STORES            STORES      @relation(fields: [id_stores_fk], references: [idStores])
   DELIVERYMEN       DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
+  HISTORIES         HISTORIES[]
+}
+
+model HISTORIES {
+  idHISTORIES       Int         @id @default(autoincrement())
+  modified          DateTime    @default(now())
+  timestamp         DateTime
+  preparation_time  Int
+  state             Int
+  id_users_fk       Int
+  id_stores_fk      Int
+  id_deliverymen_fk Int
+  address           String
+  idDELIVERIES_fk   Int?
+  USERS             USERS       @relation(fields: [id_users_fk], references: [idUSERS])
+  STORES            STORES      @relation(fields: [id_stores_fk], references: [idStores])
+  DELIVERYMEN       DELIVERYMEN @relation(fields: [id_deliverymen_fk], references: [idDELIVERYMEN])
+  DELIVERIES        DELIVERIES? @relation(fields: [idDELIVERIES_fk], references: [idDELIVERIES])
 }
