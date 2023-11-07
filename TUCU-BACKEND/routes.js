@@ -394,7 +394,7 @@ router.get('/user_store/:userId', async (req, res) => {
 /**
  * Endpoint 
  */
-router.get('/tienda/:idTienda', async (req, res) => {
+router.get('/tracking/:idTienda', async (req, res) => {
   try {
     const idTienda = parseInt(req.params.idTienda);
 
