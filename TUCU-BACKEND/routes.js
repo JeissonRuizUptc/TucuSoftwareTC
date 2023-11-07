@@ -437,7 +437,54 @@ router.get('/tracking/:idTienda', async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 });
+router.get('/transfer-deliveries', async (req, res) => {
+  try {
+    await transferData();
+    res.status(200).send('La transferencia de datos se completó con éxito.');
+  } catch (error) {
+    res.status(500).send('Hubo un error al transferir los datos.');
+  }
+});
 
+async function transferData() {
+  try {
+    // Obtén los datos de DELIVERIES a transferir
+    const deliveriesToTransfer = await prisma.DELIVERIES.findMany();
+
+    if (deliveriesToTransfer.length === 0) {
+      console.log('No hay datos para transferir.');
+      return;
+    }
+
+    // Inicia una transacción para evitar problemas de consistencia
+    await prisma.$transaction([
+      // Crea registros en la tabla HISTORIES con los datos de DELIVERIES
+      ...deliveriesToTransfer.map((delivery) =>
+        prisma.HISTORIES.create({
+          data: {
+            timestamp: delivery.timestamp,
+            preparation_time: delivery.preparation_time,
+            state: delivery.state,
+            id_users_fk: delivery.id_users_fk,
+            id_stores_fk: delivery.id_stores_fk,
+            id_deliverymen_fk: delivery.id_deliverymen_fk,
+            address: delivery.address,
+          },
+        })
+      ),
+      // Elimina los registros de DELIVERIES
+      prisma.DELIVERIES.deleteMany(),
+    ]);
+
+    console.log('Datos transferidos a la tabla HISTORIES y registros eliminados de DELIVERIES.');
+  } catch (error) {
+    console.error('Error al transferir datos y eliminar registros:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+transferData();
 // Función para mapear el estado a texto
 function mapStateToText(state) {
   switch (state) {
