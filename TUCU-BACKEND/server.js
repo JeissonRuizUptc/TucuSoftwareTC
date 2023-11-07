@@ -11,7 +11,6 @@ const routes = require('./routes')
 const PORT = process.env.PORT || 3200;
 
 
-
 //route
 app.get('/', (req, res) => {
     res.send('Welcome to my APIREST')

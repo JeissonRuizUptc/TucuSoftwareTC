@@ -96,6 +96,7 @@ router.post('/newStore', async (req, res) => {
     res.status(500).json({ error: 'Se produjo un error al crear la tienda.' });
   }
 });
+
 //crear deliveryman
 router.post('/createDeliveryman', async (req, res) => {
   try {
@@ -239,7 +240,9 @@ router.post('/newRol', async (req, res) => {
       res.status(500).json({ error: 'Se produjo un error al crear el usuario.' });
   }
 });
-
+/**
+ * Obtiene todos los domicialiarios
+ */
 router.get('/deliverymen', async (req, res) => {
   try {
     const deliverymen = await prisma.DELIVERYMEN.findMany();
@@ -292,7 +295,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
+/**
+ * Obtener todos los pedidos
+ */
 router.get('/manyDeliveries', async (req, res) => {
   try {
       const deliveries = await prisma.dELIVERIES.findMany();
@@ -356,6 +361,7 @@ router.put('/deliveries/:id', async (req, res) => {
       res.status(500).send('Error al actualizar el estado de la entrega');
   }
 });
+
 //endpoint join entre user y store
 router.get('/user_store/:userId', async (req, res) => {
   try {
@@ -385,62 +391,70 @@ router.get('/user_store/:userId', async (req, res) => {
   }
 });
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+/**
+ * Endpoint 
+ */
+router.get('/tienda/:idTienda', async (req, res) => {
+  try {
+    const idTienda = parseInt(req.params.idTienda);
 
-  app.get('/getDomiciliarioLocation/:domiciliarioId', (req, res) => {
-    // Obtener las coordenadas en tiempo real de acuerdo al domiciliarioId
-    const domiciliarioId = req.params.domiciliarioId;
-    
-    // Simula obtener las coordenadas en tiempo real (reemplaza esto con tu lógica real)
-    const lat = 12.345678;
-    const lng = -45.678901;
-  
-    // Enviar las coordenadas al cliente usando WebSockets (socket.io)
-    io.emit(`location_${domiciliarioId}`, { lat, lng });
-    res.send('Ubicación en tiempo real enviada');
-  });
-  
-    // Generar la ubicacion del domiciliario
-  function obtenerUbicacionDomiciliario() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-  
-        // Actualizar el mapa con las nuevas coordenadas
-        actualizarMapa(lat, lng);
-      });
+    // Consulta la tienda por ID y selecciona los campos específicos
+    const tienda = await prisma.STORES.findUnique({
+      where: { idStores: idTienda },
+      select: {
+        DELIVERIES: {
+          select: {
+            idDELIVERIES: true,
+            timestamp: true,
+            preparation_time: true,
+            address: true,
+            state: true,
+            DELIVERYMEN: {
+              select: {
+                surname: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!tienda) {
+      return res.status(404).json({ message: 'Tienda no encontrada' });
     }
+
+    // Mapea el valor del campo state a los textos correspondientes
+    const estadoMapeado = tienda.DELIVERIES.map((delivery) => {
+      delivery.state = mapStateToText(delivery.state);
+      return delivery;
+    });
+
+    tienda.DELIVERIES = estadoMapeado;
+
+    res.json(tienda);
+  } catch (error) {
+    console.error('Error al buscar la tienda y sus pedidos:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
- 
-  
-  // Actualizar la ubicacion del domiciliario
-  function actualizarMapa(lat, lng) {
-    // Verificar si la API de Google Maps se ha cargado
-    if (typeof google === 'object' && typeof google.maps === 'object') {
-      // Coordenadas
-      const ubicacion = { lat, lng };
-  
-      // Opciones de mapa
-      const mapOptions = {
-        zoom: 15, // Nivel de zoom (ajusta según tus necesidades)
-        center: ubicacion, // Centra el mapa en la nueva ubicación
-      };
-  
-      // Crear un nuevo mapa en el elemento HTML con ID "map"
-      const map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  
-      // Crear un marcador en la ubicación
-      const marker = new google.maps.Marker({
-        position: ubicacion,
-        map: map,
-        title: 'Ubicación del domiciliario',
-      });
-    } else {
-      console.log('La API de Google Maps no está cargada.');
-    }
+});
+
+// Función para mapear el estado a texto
+function mapStateToText(state) {
+  switch (state) {
+    case 0:
+      return 'CANCELADO';
+    case 1:
+      return 'EN PREPARACION';
+    case 2:
+      return 'EN CAMINO';
+    case 3:
+      return 'ENTREGADO';
+    default:
+      return 'Desconocido';
   }
+}
+
+
   
   /**Funcion para validar el telefono
    */
