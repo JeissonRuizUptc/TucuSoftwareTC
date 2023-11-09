@@ -446,6 +446,16 @@ router.get('/transfer-deliveries', async (req, res) => {
   }
 });
 
+//get de histories
+router.get('/histories', async (req, res) => {
+  try {
+    const histories = await prisma.hISTORIES.findMany();
+    res.status(200).json(histories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 async function transferData() {
   try {
     // Obtén los datos de DELIVERIES a transferir
