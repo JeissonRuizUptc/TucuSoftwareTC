@@ -481,7 +481,7 @@ router.get('/histories-by-delivery-date/:date', async (req, res) => {
 });
 
 // Endpoint para obtener historiales por ID de store
-app.get('/histories-by-store/:storeId', async (req, res) => {
+router.get('/histories-by-store/:storeId', async (req, res) => {
   const storeId = parseInt(req.params.storeId);
 
   try {
