@@ -480,20 +480,21 @@ router.get('/histories-by-delivery-date/:date', async (req, res) => {
   }
 });
 
-// Endpoint para obtener historiales por ID de store
-router.get('/histories-by-store/:storeId', async (req, res) => {
+// Endpoint para obtener los usuarios de 'HISTORIES' por ID de tienda
+router.get('/histories/users/:storeId', async (req, res) => {
   const storeId = parseInt(req.params.storeId);
 
   try {
-    const histories = await prisma.histories.findMany({
+    const users = await prisma.hISTORIES.findMany({
       where: {
-        id_stores_fk: storeId,
+        id_stores_fk: storeId
       },
       include: {
-        STORES: true, // Incluye los detalles de STORES en el resultado
+        USERS: true
       }
     });
-    res.json(histories);
+
+    res.json(users);
   } catch (error) {
     res.status(500).send(error.message);
   }
