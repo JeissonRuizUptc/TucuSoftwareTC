@@ -494,7 +494,28 @@ async function transferData() {
   }
 }
 
-transferData();
+
+// Endpoint para actualizar el estado de una entrega
+router.put('/update-delivery/:id', async (req, res) => {
+  const deliveryId = parseInt(req.params.id);
+  const { newState } = req.body;
+
+  try {
+    const updatedDelivery = await prisma.deliveries.update({
+      where: {
+        idDELIVERIES: deliveryId,
+      },
+      data: {
+        state: newState,
+      },
+    });
+    res.json(updatedDelivery);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+
 // Función para mapear el estado a texto
 function mapStateToText(state) {
   switch (state) {
