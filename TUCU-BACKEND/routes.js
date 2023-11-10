@@ -458,23 +458,23 @@ router.get('/histories', async (req, res) => {
 
 // Endpoint para obtener historiales por la fecha de timestamp de deliveries
 router.get('/histories-by-delivery-date/:date', async (req, res) => {
-  const date = new Date(req.params.date);
-
+  const { date } = req.params;
+  
   try {
-    const histories = await prisma.histories.findMany({
+    const histories = await prisma.hISTORIES.findMany({
       where: {
         DELIVERIES: {
           timestamp: {
-            gte: date,
-            lt: new Date(date.getTime() + 24 * 60 * 60 * 1000) // Añade un día para cubrir todo el día consultado
+            equals: new Date(date)
           }
         }
       },
       include: {
-        DELIVERIES: true, // Incluye los detalles de DELIVERIES en el resultado
+        USERS: true // Incluye los datos de los usuarios
       }
     });
-    res.json(histories);
+
+    res.status(200).json(histories);
   } catch (error) {
     res.status(500).send(error.message);
   }
