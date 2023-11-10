@@ -546,7 +546,7 @@ router.put('/update-delivery/:id', async (req, res) => {
   const { newState } = req.body;
 
   try {
-    const updatedDelivery = await prisma.deliveries.update({
+    const updatedDelivery = await prisma.dELIVERIES.update({
       where: {
         idDELIVERIES: deliveryId,
       },
