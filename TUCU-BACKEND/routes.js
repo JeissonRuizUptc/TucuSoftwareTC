@@ -456,6 +456,50 @@ router.get('/histories', async (req, res) => {
   }
 });
 
+// Endpoint para obtener historiales por la fecha de timestamp de deliveries
+router.get('/histories-by-delivery-date/:date', async (req, res) => {
+  const date = new Date(req.params.date);
+
+  try {
+    const histories = await prisma.histories.findMany({
+      where: {
+        DELIVERIES: {
+          timestamp: {
+            gte: date,
+            lt: new Date(date.getTime() + 24 * 60 * 60 * 1000) // Añade un día para cubrir todo el día consultado
+          }
+        }
+      },
+      include: {
+        DELIVERIES: true, // Incluye los detalles de DELIVERIES en el resultado
+      }
+    });
+    res.json(histories);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// Endpoint para obtener historiales por ID de store
+app.get('/histories-by-store/:storeId', async (req, res) => {
+  const storeId = parseInt(req.params.storeId);
+
+  try {
+    const histories = await prisma.histories.findMany({
+      where: {
+        id_stores_fk: storeId,
+      },
+      include: {
+        STORES: true, // Incluye los detalles de STORES en el resultado
+      }
+    });
+    res.json(histories);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+
 async function transferData() {
   try {
     // Obtén los datos de DELIVERIES a transferir
