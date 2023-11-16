@@ -627,6 +627,26 @@ router.get('/countDeliveriesByState', async (req, res) => {
   }
 });
 
+// Endpoint para obtener los pedidos en estado "entregado" con su timestamp
+router.get('/deliveredDeliveries', async (req, res) => {
+  try {
+    const deliveredDeliveries = await prisma.dELIVERIES.findMany({
+      where: {
+        state: 3, // Estado "entregado"
+      },
+      select: {
+        idDELIVERIES: true,
+        timestamp: true,
+      },
+    });
+
+    res.status(200).json(deliveredDeliveries);
+  } catch (error) {
+    console.error('Error al obtener los pedidos entregados:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 
 // Función para mapear el estado a texto
 function mapStateToText(state) {
