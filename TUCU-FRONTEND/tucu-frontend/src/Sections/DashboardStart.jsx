@@ -1,5 +1,6 @@
 import React from "react";
 import './Styles/DashboardStart.css';
+import MapContainer from "../Components/MapContainer";
 
 
 const DashboardStart = () => {
@@ -30,6 +31,10 @@ const DashboardStart = () => {
                 <p>Recaudo total:      $4.950.000</p>
             </div>
 
+            <div>
+                <MapContainer destinationAddress={"Carrera 4 #43-3, Santa Inés, Tunja, Boyacá"} originAddress={"Diagonal 38 #10-2, Tunja, Boyacá"}/>
+            </div>
+            
             <div className="DashboardStart-routes">
                 <h1>Entregas en camino</h1>
                 <div className="DashboardStart-routes__map">
