@@ -339,7 +339,7 @@ router.get('/deliveriesWithDeliverymen', async (req, res) => {
 });
 
 //actualizar estado del delivery #borrar xd
-router.put('/deliveries/:id', async (req, res) => {
+router.put('/updatedeliveries/:id', async (req, res) => {
   const { id } = req.params;
   const { state } = req.body;
 
@@ -456,29 +456,82 @@ router.get('/histories', async (req, res) => {
   }
 });
 
-// Endpoint para obtener historiales por la fecha de timestamp de deliveries
-router.get('/histories-by-delivery-date/:date', async (req, res) => {
-  const { date } = req.params;
-  
+//Endpoint para traer registros entre 2 fechas
+router.get('/histories-between-dates/:startDate/:endDate', async (req, res) => {
+  const { startDate, endDate } = req.params;
+
+  console.log("Fecha de inicio recibida:", startDate);
+  console.log("Fecha de fin recibida:", endDate);
+
+  // Convertir las fechas recibidas al inicio y final del día en formato UTC
+  const startDateTime = new Date(startDate + 'T00:00:00.000Z');
+  const endDateTime = new Date(endDate + 'T23:59:59.999Z');
+
+  console.log("Fecha de inicio:", startDateTime.toISOString());
+  console.log("Fecha de fin:", endDateTime.toISOString());
+
   try {
-    const histories = await prisma.hISTORIES.findMany({
+    const histories = await prisma.HISTORIES.findMany({
       where: {
-        DELIVERIES: {
-          timestamp: {
-            equals: new Date(date)
-          }
+        timestamp: {
+          gte: startDateTime,
+          lte: endDateTime
         }
       },
       include: {
-        USERS: true // Incluye los datos de los usuarios
+        USERS: true,
+        STORES: true,
+        DELIVERYMEN: true,
+        DELIVERIES: true
       }
     });
 
+    console.log("Registros encontrados:", histories.length);
+
     res.status(200).json(histories);
   } catch (error) {
+    console.error("Error al realizar la consulta:", error.message);
     res.status(500).send(error.message);
   }
 });
+
+//Endpoint de traer histtoricos desde una fecha
+router.get('/histories-by-date/:date', async (req, res) => {
+  const { date } = req.params;
+
+  console.log("Fecha recibida:", date);
+
+  // Convertir la fecha recibida al inicio del día en formato UTC
+  const startDate = new Date(date + 'T00:00:00.000Z');
+  // Configurar endDate para el final del día en formato UTC
+  const endDate = new Date(date + 'T23:59:59.999Z');
+
+ 
+  try {
+    const histories = await prisma.HISTORIES.findMany({
+      where: {
+        timestamp: {
+          gte: startDate,
+          lte: endDate
+        }
+      },
+      include: {
+        USERS: true,
+        STORES: true,
+        DELIVERYMEN: true,
+        DELIVERIES: true
+      }
+    });
+
+    console.log("Registros encontrados:", histories.length);
+
+    res.status(200).json(histories);
+  } catch (error) {
+    console.error("Error al realizar la consulta:", error.message);
+    res.status(500).send(error.message);
+  }
+});
+
 
 // Endpoint para obtener los usuarios de 'HISTORIES' por ID de tienda
 router.get('/histories/users/:storeId', async (req, res) => {
@@ -499,7 +552,6 @@ router.get('/histories/users/:storeId', async (req, res) => {
     res.status(500).send(error.message);
   }
 });
-
 
 async function transferData() {
   try {
