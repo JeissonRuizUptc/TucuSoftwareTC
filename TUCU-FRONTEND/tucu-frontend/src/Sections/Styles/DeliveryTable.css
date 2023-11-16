@@ -1,0 +1,44 @@
+.deliveryTable-container {
+    display: flex;
+    width: 100%;
+    height: 90vh;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.table-auto thead {
+    
+    /* 116.667% */
+}
+
+.table-auto th {
+    color: #4C4C6D;
+    padding: 2rem 2.5rem;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+    /* 116.667% */
+}
+
+.table-auto td {
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 140% */
+}
+
+.table-auto button{
+    width: 90.257px;
+    color: #FFF;
+    height: 34.466px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: #1B9C85;
+}

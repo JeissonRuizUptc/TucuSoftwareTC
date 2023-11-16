@@ -3,12 +3,14 @@ import { Navigate, useNavigate } from "react-router-dom";
 import './Styles/Dashboard.css';
 import DashboardStart from "../Sections/DashboardStart";
 import DashboardCreateOrder from "../Sections/DashboardCreateOrder";
+import DeliveryTable from "../Sections/DeliveryTable"; // Importa el componente DeliveryTable
 
 const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
     const navigate = useNavigate();
     const [token, setToken] = useState("");
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true); // Estado para controlar la carga del componente
+    const [selectedComponent, setSelectedComponent] = useState("DashboardStart"); // Nuevo estado para el componente seleccionado
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
@@ -49,10 +51,19 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
         navigate("/");
     };
 
-    const [selectedComponent, setSelectedComponent] = useState("DashboardCreateOrder");
-
     const handleComponentChange = (componentName) => {
         setSelectedComponent(componentName);
+    };
+
+    const renderSelectedComponent = () => {
+        switch (selectedComponent) {
+            case "DashboardCreateOrder":
+                return <DashboardCreateOrder />;
+            case "DeliveryTable":
+                return <DeliveryTable />;
+            default:
+                return <DashboardStart />;
+        }
     };
 
     if (!sesionIniciada) {
@@ -87,30 +98,26 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
 
 
                 </div>
-                <div className="dashboardHeaderSection_container" >
-                    {selectedComponent === "DashboardCreateOrder" ? (
-                        <DashboardCreateOrder />
-                    ) : (
-                        <DashboardStart />
-                    )}
+                <div className="dashboardHeaderSection_container">
+                    {renderSelectedComponent()}
                 </div>
             </div>
             <div className="dashboardNav">
                 <h1>Tucu</h1>
                 <div className="dashboardNav-items">
-
-                    <a href="#" onClick={() => handleComponentChange("DashboardStart")}>
+                    <a href="" onClick={() => handleComponentChange("DashboardStart")}>
                         <p>Inicio</p>
                     </a>
-                    <a href="" onClick={() => handleComponentChange("DashboardCreateOrder")}>
+                    <a href="#" onClick={() => handleComponentChange("DashboardCreateOrder")}>
                         <p>Crear Pedido</p>
                     </a>
-                    <a href=""><p>Seguimiento</p></a>
+                    <a href="##" onClick={() => handleComponentChange("DeliveryTable")}> {/* Usar "DeliveryTable" en lugar de "DashboardTable" */}
+                        <p>Seguimiento</p>
+                    </a>
                     <button
                         className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-                        onClick={handleLogout} // Agrega el manejador de eventos para cerrar sesión
+                        onClick={handleLogout}
                     > Cerrar Sesion</button>
-
                 </div>
             </div>
         </div>
