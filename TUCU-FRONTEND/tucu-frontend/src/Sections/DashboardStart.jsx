@@ -8,7 +8,7 @@ const DashboardStart = () => {
         <div className="DashboardStart-container">
             <div className="DashboardStart-welcome">
                 <h1>¡Bienvenido, Nombre del Usuario Administrador! </h1>
-                <p>Estás en el centro de control de Entregas de Última Milla de TUCU. Administra todas las entregas y observar el progreso en tiempo real.</p>
+                <p><br/>Estás en el centro de control de Entregas de Última Milla de TUCU. Administra todas las entregas y observar el progreso en tiempo real.</p>
                 <div className="DashboardStart-buttons">
                     <button id="greenButton" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                         Visualizar pedidos

@@ -603,6 +603,30 @@ router.put('/update-delivery/:id', async (req, res) => {
   }
 });
 
+// Endpoint para contar la cantidad de pedidos por estado
+router.get('/countDeliveriesByState', async (req, res) => {
+  try {
+    const deliveryCounts = await prisma.dELIVERIES.groupBy({
+      by: ['state'],
+      _count: {
+        state: true,
+      },
+    });
+
+    // Mapea los estados a texto y construye el objeto de respuesta
+    const deliveryCountsMapped = deliveryCounts.map((count) => ({
+      state: count.state,
+      stateText: mapStateToText(count.state),
+      count: count._count,
+    }));
+
+    res.status(200).json(deliveryCountsMapped);
+  } catch (error) {
+    console.error('Error al contar los pedidos por estado:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 
 // Función para mapear el estado a texto
 function mapStateToText(state) {
