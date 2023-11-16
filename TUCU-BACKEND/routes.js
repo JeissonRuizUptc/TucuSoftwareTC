@@ -423,14 +423,6 @@ router.get('/tracking/:idTienda', async (req, res) => {
       return res.status(404).json({ message: 'Tienda no encontrada' });
     }
 
-    // Mapea el valor del campo state a los textos correspondientes
-    const estadoMapeado = tienda.DELIVERIES.map((delivery) => {
-      delivery.state = mapStateToText(delivery.state);
-      return delivery;
-    });
-
-    tienda.DELIVERIES = estadoMapeado;
-
     res.json(tienda);
   } catch (error) {
     console.error('Error al buscar la tienda y sus pedidos:', error);
@@ -504,9 +496,8 @@ router.get('/histories-by-date/:date', async (req, res) => {
   // Convertir la fecha recibida al inicio del día en formato UTC
   const startDate = new Date(date + 'T00:00:00.000Z');
   // Configurar endDate para el final del día en formato UTC
-  const endDate = new Date(date + 'T23:59:59.999Z');
+  const endDate = new Date();  // Fecha actual
 
- 
   try {
     const histories = await prisma.HISTORIES.findMany({
       where: {
