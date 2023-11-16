@@ -24,6 +24,7 @@ const DeliveryTable = () => {
             <table className="table-auto">
                 <thead>
                     <tr>
+                        <th>Acción</th>
                         <th>N° Domicilio</th>
                         <th>Hora de solicitud</th>
                         <th>Tiempo de preparacion restante</th>

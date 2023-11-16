@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import TemporizadorComponent from "../Components/TemporizadorComponent";
+import { FaPlay } from "react-icons/fa"; // Importa el ícono de "play"
+
 
 const DeliveryTableItem = ({ index, delivery }) => {
   const [buttonText, setButtonText] = useState("");
@@ -67,6 +69,24 @@ const DeliveryTableItem = ({ index, delivery }) => {
 
   return (
     <tr>
+      {/* Agrega el botón de "play" al lado izquierdo cuando el estado es 2 */}
+      <td>
+        {deliveryState === 2 && (
+          <button
+            style={{
+              backgroundColor: "green",
+              borderRadius: "50%", // Hace que el botón sea redondo
+              marginRight: "8px", // Ajusta el espaciado del botón
+              padding: "8px", // Ajusta el relleno del botón
+              border: "none", // Elimina el borde
+              cursor: "pointer", // Cambia el cursor al pasar sobre el botón
+            }}
+            onClick={"/* Manejador de clic para iniciar algo */"}
+          >
+            <FaPlay style={{ color: "white" }} /> {/* Ícono de "play" en color blanco */}
+          </button>
+        )}
+      </td>
       <td>{index + 1}</td>
       <td>{new Date(delivery.timestamp).toLocaleTimeString()}</td>
       <td>
