@@ -4,6 +4,7 @@ import './Styles/Dashboard.css';
 import DashboardStart from "../Sections/DashboardStart";
 import DashboardCreateOrder from "../Sections/DashboardCreateOrder";
 import DeliveryTable from "../Sections/DeliveryTable"; // Importa el componente DeliveryTable
+import DeliveryHistory from "../Sections/DeliveryHistory";
 
 const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true); // Estado para controlar la carga del componente
     const [selectedComponent, setSelectedComponent] = useState("DashboardStart"); // Nuevo estado para el componente seleccionado
+    const [deliveryData, setDeliveryData] = useState([]);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
@@ -59,6 +61,8 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
         switch (selectedComponent) {
             case "DashboardCreateOrder":
                 return <DashboardCreateOrder />;
+            case "DeliveryHistory":
+                return <DeliveryHistory />;
             case "DeliveryTable":
                 return <DeliveryTable userId={userData ? userData.idUSERS : ""}/>;
             default:
@@ -108,11 +112,14 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
                     <a href="" onClick={() => handleComponentChange("DashboardStart")}>
                         <p>Inicio</p>
                     </a>
-                    <a href="#" onClick={() => handleComponentChange("DashboardCreateOrder")}>
+                    <a href="#/order" onClick={() => handleComponentChange("DashboardCreateOrder")}>
                         <p>Crear Pedido</p>
                     </a>
-                    <a href="##" onClick={() => handleComponentChange("DeliveryTable")}> {/* Usar "DeliveryTable" en lugar de "DashboardTable" */}
+                    <a href="#/seguimiento" onClick={() => handleComponentChange("DeliveryTable")}> 
                         <p>Seguimiento</p>
+                    </a>
+                    <a href="#/historial" onClick={() => handleComponentChange("DeliveryHistory")}> 
+                        <p>Historial</p>
                     </a>
                     <button
                         className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"

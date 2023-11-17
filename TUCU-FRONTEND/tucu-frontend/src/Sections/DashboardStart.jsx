@@ -1,19 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import './Styles/DashboardStart.css';
-import MapContainer from "../Components/MapContainer";
-
+import axios from "axios";
+import DeliveryChart from '../Components/DeliveryChart';
 
 const DashboardStart = () => {
+
+    const [deliveryData, setDeliveryData] = useState([]);
+    
+
+    useEffect(() => {
+        axios.get('http://localhost:3200/api/countDeliveriesByState')
+            .then(response => {
+                setDeliveryData(response.data);
+            })
+            .catch(error => {
+                console.error('Error al obtener datos de entregas:', error);
+            });
+    }, []);
+
+    // Estado local para forzar la actualización del componente
+    const [, forceUpdate] = useState();
+
+    // Función para redirigir a la ruta de realizar pedidos
+    const handleRealizarPedidosClick = () => {
+        window.location.href = '#/order';
+        forceUpdate(Math.random());  // Cambia el estado local para forzar la actualización
+    };
+
+    // Función para redirigir a la ruta de crear pedido
+    const handleCrearPedidoClick = () => {
+        window.location.href = '#/Seguimiento';
+        forceUpdate(Math.random());  // Cambia el estado local para forzar la actualización
+    };
+
+
     return (
         <div className="DashboardStart-container">
             <div className="DashboardStart-welcome">
                 <h1>¡Bienvenido, Nombre del Usuario Administrador! </h1>
-                <p><br/>Estás en el centro de control de Entregas de Última Milla de TUCU. Administra todas las entregas y observar el progreso en tiempo real.</p>
+                <p><br />Estás en el centro de control de Entregas de Última Milla de TUCU. Administra todas las entregas y observar el progreso en tiempo real.</p>
                 <div className="DashboardStart-buttons">
-                    <button id="greenButton" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    {/* Utiliza las funciones de redirección en los eventos onClick */}
+                    <button id="greenButton" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={handleRealizarPedidosClick}>
                         Visualizar pedidos
                     </button>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={handleCrearPedidoClick}>
                         Crear pedido
                     </button>
                 </div>
@@ -22,15 +53,17 @@ const DashboardStart = () => {
 
             <div className="DashboardStart-stadistics">
                 <h2>Estadisticas diarias</h2>
-                
-                <p>Entregas totales:     104</p>
-                <p>Tiempo promedio de entrega:            00:38:15 </p>
-                <p>Tiempo promedio preparación:           00:28:15</p>
-                <p>Porcentaje de entregas en camino:     32%  </p>
-                <p>Porcentaje pedidos en preparación:    42%  </p>
-                <p>Recaudo total:      $4.950.000</p>
+
+                <p>Entregas totales:     16</p>
+                <p>Porcentaje de entregas en camino:     18%  </p>
+                <p>Porcentaje pedidos terminados:    82%  </p>
             </div>
-            
+
+            <div className='DashboardStart-stadistics__bar'>
+                <h2>Gráfico de Barras - Procesos de Entrega</h2>
+                <DeliveryChart data={deliveryData} />
+            </div>
+
             <div className="DashboardStart-routes">
                 <h1>Entregas en camino</h1>
                 <div className="DashboardStart-routes__map">
@@ -41,6 +74,5 @@ const DashboardStart = () => {
         </div>
     )
 }
-
 
 export default DashboardStart;

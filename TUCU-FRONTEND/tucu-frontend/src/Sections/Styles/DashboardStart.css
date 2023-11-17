@@ -3,6 +3,7 @@
     flex-direction: column;
     width: 100%;
     height: 90vh;
+    align-items: center;
     overflow-y: auto; /* Agrega scroll vertical si es necesario */
 }
 
@@ -62,6 +63,7 @@
     height: 249px;
     border-radius: 30px;
     margin: 2rem 15rem;
+    width: 60%;
     background-color: #E8F6EF;
     flex-shrink: 0;
 }
@@ -89,6 +91,31 @@
     /* 0% */
 }
 
+.DashboardStart-stadistics__bar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1200px;
+}
+
+.DashboardStart-stadistics__bar h2{
+    margin-top: 3rem;
+    color: #4C4C6D;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 0px;
+    margin-bottom: 2rem;
+}
+
+.DashboardStart-routes {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10rem;
+}
+
 .DashboardStart-routes h1{
     color: #4C4C6D;
     text-align: center;
@@ -105,3 +132,4 @@
     justify-content: center;
     align-items: center;
 }
+

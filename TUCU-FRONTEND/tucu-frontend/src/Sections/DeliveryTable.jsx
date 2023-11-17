@@ -41,7 +41,6 @@ const DeliveryTable = ({ idUser }) => {
                         <th>N° Domicilio</th>
                         <th>Hora de solicitud</th>
                         <th>Tiempo de preparacion restante</th>
-                        <th>Tiempo de mora</th>
                         <th>Domiciliario</th>
                         <th>Dirección Destino</th>
                         <th>Estado</th>

@@ -7,7 +7,7 @@ import MapContainer from "./MapContainer";
 
 const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
   const [buttonText, setButtonText] = useState("");
-  const [buttonColor, setButtonColor] = useState("green");
+  const [buttonColor, setButtonColor] = useState("#A6CF98");
   const [remainingTime, setRemainingTime] = useState(delivery.preparation_time * 60);
   const [deliveryState, setDeliveryState] = useState(delivery.state);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +26,7 @@ const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
       setDeliveryState(2);
       setRemainingTime(0);
       setButtonText("ENTREGADO");
-      setButtonColor("yellow");
+      setButtonColor("#FF9130");
       // Realiza la solicitud PUT al endpoint con el nuevo estado
       await updateDeliveryState(delivery.idDELIVERIES, 2);
     } else if (buttonText === "ENTREGADO") {
@@ -52,10 +52,10 @@ const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
     // Actualiza el texto y color del botón según el estado inicial
     if (deliveryState === 1) {
       setButtonText("Pedido listo");
-      setButtonColor("green");
+      setButtonColor("#A6CF98");
     } else if (deliveryState === 2) {
       setButtonText("ENTREGADO");
-      setButtonColor("yellow");
+      setButtonColor("#FF9130");
     }
   }, [deliveryState]);
 
@@ -69,7 +69,7 @@ const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
       clearInterval(intervalId);
       setDeliveryState(2);
       setButtonText("ENTREGADO");
-      setButtonColor("yellow");
+      setButtonColor("#FF9130");
       // Realiza la solicitud PUT al endpoint con el nuevo estado
       updateDeliveryState(delivery.idDELIVERIES, 2);
     }
@@ -84,12 +84,13 @@ const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
         {deliveryState === 2 && (
           <button
             style={{
-              backgroundColor: "green",
-              borderRadius: "50%",
+              backgroundColor: "#427D9D",
+              borderRadius: "30px",
               marginRight: "8px",
               padding: "8px",
               border: "none",
               cursor: "pointer",
+              width: "32px"
             }}
             onClick={openModal} // Cambia aquí
           >
@@ -110,7 +111,6 @@ const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
           deliveryState={deliveryState}
         />
       </td>
-      <td>00:00:00</td>
       <td>{delivery.DELIVERYMEN.surname}</td>
       <td>{delivery.address}</td>
       <td>
