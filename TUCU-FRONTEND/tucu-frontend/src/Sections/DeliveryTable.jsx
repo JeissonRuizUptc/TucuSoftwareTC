@@ -4,19 +4,32 @@ import "./Styles/DeliveryTable.css";
 import DeliveryTableItem from "../Components/DeliveryTableItem"; // Importa el nuevo componente
 
 
-const DeliveryTable = () => {
+const DeliveryTable = ({ idUser }) => {
     const [deliveries, setDeliveries] = useState([]);
+    const [defaultAddress, setDefaultAddress] = useState(""); // Nuevo estado para la dirección por defecto
+
 
     useEffect(() => {
-        // Realiza la solicitud al endpoint para obtener los datos de los pedidos
+        // Obtener datos del usuario y la tienda
+        axios.get(`http://localhost:3200/api/user_store/${idUser}`)
+          .then(response => {
+            const userStoreData = response.data;
+            const address = userStoreData?.STORES?.address || ""; // Extraer la dirección
+            setDefaultAddress(address);
+          })
+          .catch(error => {
+            console.error("Error al obtener los datos del usuario:", error);
+          });
+    
+        // Obtener datos de pedidos
         axios.get("http://localhost:3200/api/tracking/5")
-            .then(response => {
-                setDeliveries(response.data.DELIVERIES);
-            })
-            .catch(error => {
-                console.error("Error al obtener los datos de los pedidos:", error);
-            });
-    }, []);
+          .then(response => {
+            setDeliveries(response.data.DELIVERIES);
+          })
+          .catch(error => {
+            console.error("Error al obtener los datos de los pedidos:", error);
+          });
+      }, [idUser]);
 
 
     return (
@@ -36,11 +49,9 @@ const DeliveryTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-
                     {deliveries.map((delivery, index) => (
-                        <DeliveryTableItem key={index} delivery={delivery} index={index} />
+                        <DeliveryTableItem key={index} delivery={delivery} index={index} defaultAdddress={defaultAddress} />
                     ))}
-
                 </tbody>
             </table>
         </div>

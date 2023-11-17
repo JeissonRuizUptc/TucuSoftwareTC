@@ -60,7 +60,7 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
             case "DashboardCreateOrder":
                 return <DashboardCreateOrder />;
             case "DeliveryTable":
-                return <DeliveryTable />;
+                return <DeliveryTable userId={userData ? userData.idUSERS : ""}/>;
             default:
                 return <DashboardStart />;
         }

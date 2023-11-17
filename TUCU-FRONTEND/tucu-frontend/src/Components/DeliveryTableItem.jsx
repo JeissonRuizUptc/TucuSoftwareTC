@@ -2,14 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import TemporizadorComponent from "../Components/TemporizadorComponent";
 import { FaPlay } from "react-icons/fa"; // Importa el ícono de "play"
+import './Styles/DeliveryTableItem.css';
+import MapContainer from "./MapContainer";
 
-
-const DeliveryTableItem = ({ index, delivery }) => {
+const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
   const [buttonText, setButtonText] = useState("");
   const [buttonColor, setButtonColor] = useState("green");
   const [remainingTime, setRemainingTime] = useState(delivery.preparation_time * 60);
   const [deliveryState, setDeliveryState] = useState(delivery.state);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const handleButtonClick = async () => {
     if (deliveryState === 1) {
       // Si el estado es 1, actualiza a EN CAMINO y establece el tiempo restante a 0
@@ -75,15 +85,15 @@ const DeliveryTableItem = ({ index, delivery }) => {
           <button
             style={{
               backgroundColor: "green",
-              borderRadius: "50%", // Hace que el botón sea redondo
-              marginRight: "8px", // Ajusta el espaciado del botón
-              padding: "8px", // Ajusta el relleno del botón
-              border: "none", // Elimina el borde
-              cursor: "pointer", // Cambia el cursor al pasar sobre el botón
+              borderRadius: "50%",
+              marginRight: "8px",
+              padding: "8px",
+              border: "none",
+              cursor: "pointer",
             }}
-            onClick={"/* Manejador de clic para iniciar algo */"}
+            onClick={openModal} // Cambia aquí
           >
-            <FaPlay style={{ color: "white" }} /> {/* Ícono de "play" en color blanco */}
+            <FaPlay style={{ color: "white" }} />
           </button>
         )}
       </td>
@@ -115,6 +125,19 @@ const DeliveryTableItem = ({ index, delivery }) => {
           </button>
         )}
       </td>
+
+      {/* Modal con MapContainer */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <MapContainer originAddress={"Carrera 9#4-22, Duitama, Boyacá, Colombia"} destinationAddress={delivery.address} />
+
+          </div>
+        </div>
+      )}
     </tr>
   );
 };
