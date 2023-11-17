@@ -16,8 +16,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage sesionIniciada={sesionIniciada} setSesionIniciada={setSesionIniciada} />} />
-          <Route path="/registro" element={<RegisterPager />} />
-          <Route path="/dashboard" element={<Dashboard sesionIniciada={sesionIniciada} setSesionIniciada={setSesionIniciada} />} />
+          <Route path="/" element={<RegisterPager />} />
+          <Route path="/" element={<Dashboard sesionIniciada={sesionIniciada} setSesionIniciada={setSesionIniciada} />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
