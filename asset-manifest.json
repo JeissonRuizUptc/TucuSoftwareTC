@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/TucuSoftwareTC/static/css/main.1ae3f67a.css",
+    "main.js": "/TucuSoftwareTC/static/js/main.e5bbb230.js",
+    "index.html": "/TucuSoftwareTC/index.html",
+    "main.1ae3f67a.css.map": "/TucuSoftwareTC/static/css/main.1ae3f67a.css.map",
+    "main.e5bbb230.js.map": "/TucuSoftwareTC/static/js/main.e5bbb230.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1ae3f67a.css",
+    "static/js/main.e5bbb230.js"
+  ]
+}
