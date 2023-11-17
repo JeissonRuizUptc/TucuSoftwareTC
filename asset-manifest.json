@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/TucuSoftwareTC/static/css/main.1ae3f67a.css",
-    "main.js": "/TucuSoftwareTC/static/js/main.b6816470.js",
+    "main.js": "/TucuSoftwareTC/static/js/main.4e8f628c.js",
     "index.html": "/TucuSoftwareTC/index.html",
     "main.1ae3f67a.css.map": "/TucuSoftwareTC/static/css/main.1ae3f67a.css.map",
-    "main.b6816470.js.map": "/TucuSoftwareTC/static/js/main.b6816470.js.map"
+    "main.4e8f628c.js.map": "/TucuSoftwareTC/static/js/main.4e8f628c.js.map"
   },
   "entrypoints": [
     "static/css/main.1ae3f67a.css",
-    "static/js/main.b6816470.js"
+    "static/js/main.4e8f628c.js"
   ]
 }
