@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Styles/DashboardStart.css';
 import axios from "axios";
-import DeliveryChart from '../Components/DeliveryChart';
 
 const DashboardStart = () => {
 
@@ -59,10 +58,7 @@ const DashboardStart = () => {
                 <p>Porcentaje pedidos terminados:    82%  </p>
             </div>
 
-            <div className='DashboardStart-stadistics__bar'>
-                <h2>Gráfico de Barras - Procesos de Entrega</h2>
-                <DeliveryChart data={deliveryData} />
-            </div>
+
 
             <div className="DashboardStart-routes">
                 <h1>Entregas en camino</h1>
