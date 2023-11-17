@@ -9,7 +9,7 @@ const DashboardStart = () => {
     
 
     useEffect(() => {
-        axios.get('http://localhost:3200/api/countDeliveriesByState')
+        axios.get('https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/countDeliveriesByState')
             .then(response => {
                 setDeliveryData(response.data);
             })

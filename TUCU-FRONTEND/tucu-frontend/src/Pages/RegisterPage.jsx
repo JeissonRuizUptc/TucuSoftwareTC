@@ -65,7 +65,7 @@ const RegisterPager = () => {
 
 
             // Enviar la solicitud al Endpoint 2
-            const sendStore = await axios.post('http://localhost:3200/api/newStore', endpoint2Data);
+            const sendStore = await axios.post('https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/newStore', endpoint2Data);
             const responseData = sendStore.data;
             const idStores = responseData.idStores;
 
@@ -84,7 +84,7 @@ const RegisterPager = () => {
             };
 
             // Enviar la solicitud al Endpoint 1
-            await axios.post('http://localhost:3200/api/newUser', endpoint1Data);
+            await axios.post('https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/newUser', endpoint1Data);
 
 
 

@@ -11,7 +11,7 @@ const DeliveryTable = ({ idUser }) => {
 
     useEffect(() => {
         // Obtener datos del usuario y la tienda
-        axios.get(`http://localhost:3200/api/user_store/${idUser}`)
+        axios.get(`https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/user_store/${idUser}`)
           .then(response => {
             const userStoreData = response.data;
             const address = userStoreData?.STORES?.address || ""; // Extraer la dirección
@@ -22,7 +22,7 @@ const DeliveryTable = ({ idUser }) => {
           });
     
         // Obtener datos de pedidos
-        axios.get("http://localhost:3200/api/tracking/5")
+        axios.get("https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/tracking/5")
           .then(response => {
             setDeliveries(response.data.DELIVERIES);
           })

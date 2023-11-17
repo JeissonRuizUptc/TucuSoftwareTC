@@ -42,7 +42,7 @@ const DeliveryTableItem = ({ index, delivery, defaultAddress}) => {
   const updateDeliveryState = async (deliveryId, newState) => {
     try {
       // Realiza la solicitud PUT para actualizar el estado de la entrega
-      await axios.put(`http://localhost:3200/api/updatedeliveries/${deliveryId}`, { state: newState });
+      await axios.put(`https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/updatedeliveries/${deliveryId}`, { state: newState });
     } catch (error) {
       console.error("Error al actualizar el estado de la entrega:", error);
     }

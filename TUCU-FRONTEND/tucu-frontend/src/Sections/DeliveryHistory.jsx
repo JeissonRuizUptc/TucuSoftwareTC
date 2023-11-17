@@ -13,7 +13,7 @@ const DeliveryHistory = ({ idUser }) => {
   useEffect(() => {
     // Obtener datos del usuario y la tienda
     axios
-      .get(`http://localhost:3200/api/user_store/${idUser}`)
+      .get(`https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/user_store/${idUser}`)
       .then((response) => {
         const userStoreData = response.data;
         const address = userStoreData?.STORES?.address || "";
@@ -24,11 +24,11 @@ const DeliveryHistory = ({ idUser }) => {
       });
 
     // Obtener datos de pedidos
-    let endpoint = "http://localhost:3200/api/histories-by-date/2023-10-01";
+    let endpoint = "https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/histories-by-date/2023-10-01";
 
     // Verificar si hay fechas iniciales y finales especificadas
     if (fechaInicial && fechaFinal) {
-      endpoint = `http://localhost:3200/api/histories-between-dates/${fechaInicial}/${fechaFinal}`;
+      endpoint = `https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/histories-between-dates/${fechaInicial}/${fechaFinal}`;
     }
 
     axios

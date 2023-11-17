@@ -24,7 +24,7 @@ const LoginPage = ({ sesionIniciada, setSesionIniciada }) => {
         setPasswordError("");
 
         try {
-            const response = await fetch("http://localhost:3200/api/login", {
+            const response = await fetch("https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

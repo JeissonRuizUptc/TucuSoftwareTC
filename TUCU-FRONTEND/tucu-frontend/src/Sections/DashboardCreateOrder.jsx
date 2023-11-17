@@ -35,7 +35,7 @@ const DashboardCreateOrder = () => {
       const place = autocomplete.getPlace();
       console.log(place); // Aquí puedes acceder a los detalles del lugar
     });
-    axios.get("http://localhost:3200/api/deliverymen")
+    axios.get("https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/deliverymen")
       .then((response) => {
         const driverSurnames = response.data.map(driver => driver.surname);
         setDriversList(driverSurnames);
@@ -56,7 +56,7 @@ const DashboardCreateOrder = () => {
     const userIdFromToken = decodeToken(token)?.userId;
 
     try {
-      const responseUserStore = await axios.get(`http://localhost:3200/api/user_store/${userIdFromToken}`);
+      const responseUserStore = await axios.get(`https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/user_store/${userIdFromToken}`);
 
       const { id_stores_fk } = responseUserStore.data;
       const selectedDriverObj = driversWithIds.find(driver => driver.surname === selectedDriver);
@@ -71,7 +71,7 @@ const DashboardCreateOrder = () => {
         address: orderAddress,
       };
 
-      const responseCreateDelivery = await axios.post('http://localhost:3200/api/createDelivery', orderData);
+      const responseCreateDelivery = await axios.post('https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/createDelivery', orderData);
 
       if (responseCreateDelivery.status === 201) {
         toast.success('El servicio se creó correctamente', {

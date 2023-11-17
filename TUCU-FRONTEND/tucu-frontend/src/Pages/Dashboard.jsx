@@ -27,7 +27,7 @@ const Dashboard = ({ sesionIniciada, setSesionIniciada }) => {
 
                 if (payloadJson.userId) {
                     // Hacer una solicitud HTTP para obtener los datos del usuario y la tienda
-                    fetch(`http://localhost:3200/api/user_store/${payloadJson.userId}`)
+                    fetch(`https://db20-2800-484-b385-6100-306d-1ec6-4393-334f.ngrok-free.app/api/user_store/${payloadJson.userId}`)
                         .then(response => response.json())
                         .then(data => {
                             setUserData(data);
